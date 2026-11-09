@@ -1,0 +1,7 @@
+# Stage 1 — File System (reference examples 1.1 and 1.2):
+# a 64 KB disk of 16 blocks of 4 KB, indexed (i-node) allocation.
+disk:
+  block_size: 4KB
+  blocks: 16
+fs:
+  alloc: indexed
