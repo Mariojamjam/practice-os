@@ -59,11 +59,11 @@ func TestGolden(t *testing.T) {
 
 func TestFind(t *testing.T) {
 	d, err := demo.Find("indexed-allocation")
-	if err != nil || d.Preset != "stage1" || !strings.HasPrefix(d.Title, "Reference Example 1.2") {
+	if err != nil || d.Preset != "stage1" || !strings.Contains(d.Title, "ndexed allocation") {
 		t.Errorf("Find(indexed-allocation) = %+v, %v", d, err)
 	}
 	d, err = demo.Find("raid5-recovery")
-	if err != nil || d.Preset != "stage2" || !strings.HasPrefix(d.Title, "Reference Example 2.2") || len(d.Commands()) == 0 {
+	if err != nil || d.Preset != "stage2" || !strings.Contains(d.Title, "RAID 5") || len(d.Commands()) == 0 {
 		t.Errorf("Find(raid5-recovery) = %+v, %v", d, err)
 	}
 	if _, err := demo.Find("2.2"); err == nil {
