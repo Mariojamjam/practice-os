@@ -40,6 +40,7 @@ type HDD struct {
 var (
 	_ device.Device   = (*HDD)(nil)
 	_ blockio.Flusher = (*HDD)(nil)
+	_ blockio.Muter   = (*HDD)(nil)
 )
 
 // New wraps d with the given geometry.
@@ -130,3 +131,6 @@ func (h *HDD) Pending() []blockio.Flush {
 
 // Discard drops queued requests.
 func (h *HDD) Discard() { h.q.Drain() }
+
+// SetMuted implements blockio.Muter.
+func (h *HDD) SetMuted(m bool) { h.q.SetMuted(m) }

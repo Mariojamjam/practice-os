@@ -73,6 +73,18 @@ func (k *Kernel) Discard() {
 	}
 }
 
+// Inspect runs fn with I/O recording muted, so interfaces can read the
+// file system (to draw a tree or a block map) without queueing simulated
+// requests, moving heads or raising RAID events. Data reads still work,
+// including reconstruction from a failed RAID disk.
+func (k *Kernel) Inspect(fn func() error) error {
+	if m, ok := k.Device.(blockio.Muter); ok {
+		m.SetMuted(true)
+		defer m.SetMuted(false)
+	}
+	return fn()
+}
+
 // RAID returns the disk array, if the device is one.
 func (k *Kernel) RAID() (*raid.RAID, bool) {
 	r, ok := k.Device.(*raid.RAID)

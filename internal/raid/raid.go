@@ -51,11 +51,13 @@ type RAID struct {
 	disks  []device.Device
 	failed []bool
 	events []blockio.Event
+	muted  bool
 }
 
 var (
 	_ device.Device   = (*RAID)(nil)
 	_ blockio.Flusher = (*RAID)(nil)
+	_ blockio.Muter   = (*RAID)(nil)
 )
 
 // MinDisks returns the minimum number of disks for a level.
@@ -306,6 +308,16 @@ func (r *RAID) Discard() {
 	}
 }
 
+// SetMuted implements blockio.Muter for the array and its disks.
+func (r *RAID) SetMuted(m bool) {
+	r.muted = m
+	for _, d := range r.disks {
+		if mu, ok := d.(blockio.Muter); ok {
+			mu.SetMuted(m)
+		}
+	}
+}
+
 func (r *RAID) perDisk() int64 { return r.disks[0].BlockCount() }
 
 func (r *RAID) locate0(b int64) (int, int64) {
@@ -323,6 +335,9 @@ func (r *RAID) firstHealthy() int {
 }
 
 func (r *RAID) event(kind blockio.EventKind, b int64, disk int, sources []int) {
+	if r.muted {
+		return
+	}
 	e := blockio.Event{Kind: kind, Block: b, Disk: disk + 1}
 	for _, s := range sources {
 		e.Sources = append(e.Sources, s+1)

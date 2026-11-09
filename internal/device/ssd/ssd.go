@@ -45,6 +45,7 @@ type SSD struct {
 var (
 	_ device.Device   = (*SSD)(nil)
 	_ blockio.Flusher = (*SSD)(nil)
+	_ blockio.Muter   = (*SSD)(nil)
 )
 
 // New returns an empty SSD exposing logical blocks of blockSize bytes.
@@ -163,6 +164,9 @@ func (s *SSD) Discard() {
 	s.q.Drain()
 	s.erased = 0
 }
+
+// SetMuted implements blockio.Muter.
+func (s *SSD) SetMuted(m bool) { s.q.SetMuted(m) }
 
 func (s *SSD) leastWornFree() int64 {
 	best := int64(Unmapped)

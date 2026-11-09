@@ -31,11 +31,19 @@ type Request struct {
 
 // Queue holds requests in arrival order.
 type Queue struct {
-	reqs []Request
+	reqs  []Request
+	muted bool
 }
 
-// Add appends a request.
-func (q *Queue) Add(r Request) { q.reqs = append(q.reqs, r) }
+// Add appends a request, unless the queue is muted.
+func (q *Queue) Add(r Request) {
+	if !q.muted {
+		q.reqs = append(q.reqs, r)
+	}
+}
+
+// SetMuted stops (true) or resumes (false) recording requests.
+func (q *Queue) SetMuted(m bool) { q.muted = m }
 
 // Len returns the number of pending requests.
 func (q *Queue) Len() int { return len(q.reqs) }
@@ -96,6 +104,13 @@ type Flush struct {
 	Erases int
 	// Events are RAID events, for KindRAID.
 	Events []Event
+}
+
+// Muter is implemented by devices that can stop recording requests and
+// events, so their contents can be inspected without leaving simulated I/O
+// behind.
+type Muter interface {
+	SetMuted(bool)
 }
 
 // Flusher is implemented by devices that queue requests.

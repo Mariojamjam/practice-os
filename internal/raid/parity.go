@@ -187,6 +187,9 @@ func (r *RAID) xorOthers(s int64, skip int) ([]byte, []int, error) {
 }
 
 func (r *RAID) parityEvent(kind blockio.EventKind, b int64, disk int, sources []int) {
+	if r.muted {
+		return
+	}
 	r.event(kind, b, disk, sources)
 	r.events[len(r.events)-1].Parity = true
 }
