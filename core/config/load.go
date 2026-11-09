@@ -48,6 +48,7 @@ type Overrides struct {
 	Scheduler *string
 	Head      *int
 	ASCII     *bool
+	Animation *string
 }
 
 // Options controls Load.
@@ -171,5 +172,8 @@ func applyOverrides(cfg *Config, o Overrides) {
 	}
 	if o.ASCII != nil {
 		cfg.UI.ASCII = *o.ASCII
+	}
+	if o.Animation != nil {
+		cfg.UI.Animation = *o.Animation
 	}
 }

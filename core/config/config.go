@@ -40,6 +40,9 @@ var Schedulers = []string{"fcfs", "sstf", "scan", "cscan"}
 // Directions lists the valid io.direction values.
 var Directions = []string{"up", "down"}
 
+// Animations lists the valid ui.animation speeds.
+var Animations = []string{"off", "slow", "normal", "fast"}
+
 // RAIDLevels lists the valid raid.level values.
 var RAIDLevels = []int{0, 1, 4, 5}
 
@@ -114,6 +117,8 @@ type FS struct {
 // UI configures presentation.
 type UI struct {
 	ASCII bool `yaml:"ascii"`
+	// Animation is the speed of TUI animations: off, slow, normal or fast.
+	Animation string `yaml:"animation"`
 }
 
 // Size is a byte count that YAML accepts either as a number or as a human
@@ -146,6 +151,7 @@ func Default() Config {
 		FS:   FS{Alloc: AllocIndexed},
 		IO:   IO{Device: DeviceHDD, Scheduler: "sstf", Direction: "up"},
 		RAID: RAID{Level: 5, Disks: 3, Member: DeviceHDD},
+		UI:   UI{Animation: "normal"},
 	}
 }
 
@@ -165,6 +171,9 @@ func (c Config) Validate() error {
 	}
 	if !slices.Contains(AllocStrategies, c.FS.Alloc) {
 		return fmt.Errorf("%w: fs.alloc must be one of %v, got %q", ErrInvalidConfig, AllocStrategies, c.FS.Alloc)
+	}
+	if !slices.Contains(Animations, c.UI.Animation) {
+		return fmt.Errorf("%w: ui.animation must be one of %v, got %q", ErrInvalidConfig, Animations, c.UI.Animation)
 	}
 	return c.validateIO()
 }
