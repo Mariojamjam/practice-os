@@ -71,13 +71,10 @@ func New(dev device.Device, strategy string) (*FS, error) {
 	return f, nil
 }
 
-// Format erases the device and creates an empty file system.
+// Format creates an empty file system, like mkfs: it writes only the
+// structures it needs (root directory, FAT). Old bytes in free blocks are
+// left as they are; every block is fully rewritten when allocated.
 func (f *FS) Format(strategy string) error {
-	for b := range f.dev.BlockCount() {
-		if err := f.dev.Write(b, nil); err != nil {
-			return err
-		}
-	}
 	bm := alloc.NewBitmap(f.dev.BlockCount())
 	al, err := alloc.New(strategy, f.dev, bm)
 	if err != nil {
