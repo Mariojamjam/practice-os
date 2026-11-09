@@ -165,3 +165,77 @@ func TestPresets(t *testing.T) {
 		}
 	}
 }
+
+func TestTrackCount(t *testing.T) {
+	tests := []struct {
+		disk config.Disk
+		want int
+	}{
+		{config.Disk{Blocks: 16, BlocksPerTrack: 1}, 16},
+		{config.Disk{Blocks: 17, BlocksPerTrack: 4}, 5},
+		{config.Disk{Blocks: 16, Tracks: 200, BlocksPerTrack: 1}, 200},
+	}
+	for _, tt := range tests {
+		if got := tt.disk.TrackCount(); got != tt.want {
+			t.Errorf("%+v.TrackCount() = %d, want %d", tt.disk, got, tt.want)
+		}
+	}
+}
+
+func TestStage2Preset(t *testing.T) {
+	cfg, err := config.Load(config.Options{Dir: t.TempDir(), Overrides: config.Overrides{Preset: ptr("stage2")}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := config.IO{Device: config.DeviceRAID, Scheduler: "sstf", Head: 53, Direction: "up", Trace: true}
+	if cfg.IO != want || cfg.RAID != (config.RAID{Level: 5, Disks: 3, Member: config.DeviceHDD}) {
+		t.Errorf("io %+v, raid %+v", cfg.IO, cfg.RAID)
+	}
+	if cfg.Disk.TrackCount() != 200 || cfg.Disk.Blocks != 200 {
+		t.Errorf("disk %+v", cfg.Disk)
+	}
+}
+
+func TestIOOverrides(t *testing.T) {
+	cfg, err := config.Load(config.Options{Dir: t.TempDir(), Overrides: config.Overrides{
+		Device: ptr(config.DeviceSSD), Disks: ptr(4), Scheduler: ptr("cscan"), Head: ptr(7),
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if cfg.IO.Device != config.DeviceSSD || cfg.RAID.Disks != 4 || cfg.IO.Scheduler != "cscan" || cfg.IO.Head != 7 {
+		t.Errorf("overrides not applied: %+v %+v", cfg.IO, cfg.RAID)
+	}
+}
+
+func TestIOValidation(t *testing.T) {
+	tests := []struct {
+		name string
+		file string
+	}{
+		{"zero blocks per track", "disk:\n  blocks_per_track: 0\n"},
+		{"tracks too few", "disk:\n  blocks: 16\n  tracks: 3\n  blocks_per_track: 4\n"},
+		{"unknown device", "io:\n  device: tape\n"},
+		{"unknown scheduler", "io:\n  scheduler: look\n"},
+		{"unknown direction", "io:\n  direction: left\n"},
+		{"head outside the disk", "io:\n  head: 16\n"},
+		{"unknown RAID level", "raid:\n  level: 3\n"},
+		{"RAID 5 with two disks", "raid:\n  level: 5\n  disks: 2\n"},
+		{"RAID 1 with one disk", "raid:\n  level: 1\n  disks: 1\n"},
+		{"unknown RAID member", "raid:\n  member: tape\n"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			dir := t.TempDir()
+			writeFile(t, dir, tt.file)
+			if _, err := config.Load(config.Options{Dir: dir}); !errors.Is(err, config.ErrInvalidConfig) {
+				t.Errorf("error = %v, want ErrInvalidConfig", err)
+			}
+		})
+	}
+	dir := t.TempDir()
+	writeFile(t, dir, "raid:\n  level: 0\n  disks: 2\n  member: ssd\n")
+	if _, err := config.Load(config.Options{Dir: dir}); err != nil {
+		t.Errorf("RAID 0 of two SSDs: %v", err)
+	}
+}
