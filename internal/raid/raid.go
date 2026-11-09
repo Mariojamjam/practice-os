@@ -82,7 +82,7 @@ func New(level int, disks []device.Device) (*RAID, error) {
 	return &RAID{level: level, disks: disks, failed: make([]bool, len(disks))}, nil
 }
 
-func supported(level int) bool { return level == 0 || level == 1 }
+func supported(level int) bool { return level == 0 || level == 1 || level == 4 || level == 5 }
 
 // Name returns the array's display name, e.g. "RAID 5".
 func (r *RAID) Name() string { return fmt.Sprintf("RAID %d", r.level) }
@@ -102,8 +102,11 @@ func (r *RAID) BlockSize() int { return r.disks[0].BlockSize() }
 // BlockCount implements device.Device: the usable capacity.
 func (r *RAID) BlockCount() int64 {
 	per, n := r.perDisk(), int64(len(r.disks))
-	if r.level == 0 {
+	switch r.level {
+	case 0:
 		return per * n
+	case 4, 5:
+		return per * (n - 1)
 	}
 	return per
 }
@@ -113,14 +116,20 @@ func (r *RAID) Stripes() int64 { return r.perDisk() }
 
 // StripeOf returns the stripe holding logical block b.
 func (r *RAID) StripeOf(b int64) int64 {
-	if r.level == 0 {
+	switch r.level {
+	case 0:
 		return b / int64(len(r.disks))
+	case 4, 5:
+		return b / int64(len(r.disks)-1)
 	}
 	return b
 }
 
 // Stripe returns the slots of stripe s, one per disk, in disk order.
 func (r *RAID) Stripe(s int64) []Slot {
+	if r.parityLevel() {
+		return r.parityStripe(s)
+	}
 	n := int64(len(r.disks))
 	slots := make([]Slot, n)
 	for i := range slots {
@@ -145,6 +154,9 @@ func (r *RAID) Read(b int64) ([]byte, error) {
 		}
 		return r.disks[d].Read(off)
 	}
+	if r.parityLevel() {
+		return r.readParity(b)
+	}
 	src := r.firstHealthy()
 	if src < 0 {
 		return nil, ErrArrayFailed
@@ -166,6 +178,9 @@ func (r *RAID) Write(b int64, data []byte) error {
 			return fmt.Errorf("block %d on Disk %d: %w", b, d+1, ErrDataLost)
 		}
 		return r.disks[d].Write(off, data)
+	}
+	if r.parityLevel() {
+		return r.writeParity(b, data)
 	}
 	if r.firstHealthy() < 0 {
 		return ErrArrayFailed
@@ -221,6 +236,14 @@ func (r *RAID) Rebuild() ([]Rebuilt, error) {
 		}
 		if r.level == 0 {
 			return nil, fmt.Errorf("rebuilding disk %d: %w", i+1, ErrDataLost)
+		}
+		if r.parityLevel() {
+			rb, err := r.rebuildParity(i)
+			if err != nil {
+				return nil, err
+			}
+			out = append(out, rb)
+			continue
 		}
 		src := r.firstHealthy()
 		if src < 0 {
