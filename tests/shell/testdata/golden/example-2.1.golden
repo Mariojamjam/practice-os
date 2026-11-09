@@ -1,0 +1,36 @@
+> sched --queue 98,183,37,122,14 --head 53 --alg sstf
+[I/O] Pending requests on tracks: [98, 183, 37, 122, 14]
+Current head position: track 53
+
+--- DISK SCHEDULING: SSTF (Shortest Seek Time First) ---
+Service order  : 53 -> 37 -> 14 -> 98 -> 122 -> 183
+Head movement  : |53-37| + |37-14| + |14-98| + |98-122| + |122-183|
+Total movement : 16 + 23 + 84 + 24 + 61 = 208 tracks
+
+> sched --queue 98,183,37,122,14 --head 53 --alg fcfs
+[I/O] Pending requests on tracks: [98, 183, 37, 122, 14]
+Current head position: track 53
+
+--- DISK SCHEDULING: FCFS (First-Come, First-Served) ---
+Service order  : 53 -> 98 -> 183 -> 37 -> 122 -> 14
+Head movement  : |53-98| + |98-183| + |183-37| + |37-122| + |122-14|
+Total movement : 45 + 85 + 146 + 85 + 108 = 469 tracks
+
+> sched --queue 98,183,37,122,14 --head 53 --alg scan
+[I/O] Pending requests on tracks: [98, 183, 37, 122, 14]
+Current head position: track 53 (moving up)
+
+--- DISK SCHEDULING: SCAN (Elevator) ---
+Service order  : 53 -> 98 -> 122 -> 183 -> 199 (edge) -> 37 -> 14
+Head movement  : |53-98| + |98-122| + |122-183| + |183-199| + |199-37| + |37-14|
+Total movement : 45 + 24 + 61 + 16 + 162 + 23 = 331 tracks
+
+> sched --queue 98,183,37,122,14 --head 53 --alg cscan
+[I/O] Pending requests on tracks: [98, 183, 37, 122, 14]
+Current head position: track 53 (moving up)
+
+--- DISK SCHEDULING: C-SCAN (Circular SCAN) ---
+Service order  : 53 -> 98 -> 122 -> 183 -> 199 (edge) -> 0 (jump) -> 14 -> 37
+Head movement  : |53-98| + |98-122| + |122-183| + |183-199| + |199-0| + |0-14| + |14-37|
+Total movement : 45 + 24 + 61 + 16 + 199 + 14 + 23 = 382 tracks
+

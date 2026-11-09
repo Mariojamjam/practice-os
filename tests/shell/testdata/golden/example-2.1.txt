@@ -1,0 +1,8 @@
+# preset: stage2
+# Reference Example 2.1: SSTF scheduling of the queue 98, 183, 37, 122, 14
+# with the head at track 53, followed by the same queue under the other
+# algorithms for comparison (SCAN and C-SCAN sweep up, as io.direction).
+sched --queue 98,183,37,122,14 --head 53 --alg sstf
+sched --queue 98,183,37,122,14 --head 53 --alg fcfs
+sched --queue 98,183,37,122,14 --head 53 --alg scan
+sched --queue 98,183,37,122,14 --head 53 --alg cscan

@@ -16,7 +16,8 @@ import (
 var update = flag.Bool("update", false, "rewrite the golden files with the current output")
 
 // TestGolden runs every testdata/golden/NAME.txt script through the shell
-// with the stage1 preset and compares the transcript with NAME.golden.
+// and compares the transcript with NAME.golden. Scripts use the stage1
+// preset unless a "# preset: NAME" comment says otherwise.
 // Regenerate with: go test ./tests/shell -update
 func TestGolden(t *testing.T) {
 	scripts, err := filepath.Glob(filepath.Join("testdata", "golden", "*.txt"))
@@ -50,11 +51,17 @@ func TestGolden(t *testing.T) {
 }
 
 // transcript runs a script and returns its output in the reference format:
-// each command echoed as "> command", followed by its output and a blank
-// line. Comments and blank lines are not echoed.
+// each command echoed as "> command", followed by its output, its I/O (when
+// traced, or RAID events) and a blank line. Comments and blank lines are
+// not echoed.
 func transcript(t *testing.T, src string) string {
 	t.Helper()
 	preset := "stage1"
+	for _, line := range strings.Split(src, "\n") {
+		if name, ok := strings.CutPrefix(strings.TrimSpace(line), "# preset:"); ok {
+			preset = strings.TrimSpace(name)
+		}
+	}
 	cfg, err := config.Load(config.Options{Dir: t.TempDir(), Overrides: config.Overrides{Preset: &preset}})
 	if err != nil {
 		t.Fatal(err)
@@ -76,6 +83,12 @@ func transcript(t *testing.T, src string) string {
 		out := render.Result(res, render.Options{})
 		if err != nil {
 			out = render.Error(err)
+		}
+		if io := render.IO(sh.LastIO(), render.Options{}); io != "" {
+			if out != "" {
+				out += "\n"
+			}
+			out += io
 		}
 		if out != "" {
 			b.WriteString(out + "\n")

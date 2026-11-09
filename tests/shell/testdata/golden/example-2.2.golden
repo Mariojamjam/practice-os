@@ -1,0 +1,66 @@
+> io_trace off
+I/O trace off.
+
+> mkdir /data
+> create /data/sheet.csv --size 8KB
+> raid_status /data/sheet.csv
+Active array: RAID 5 (3 physical disks, 4 KB blocks) | capacity: 400 blocks (1600 KB)
+Disk 1: OK | Disk 2: OK | Disk 3: OK
+
+[I/O - DISK DISTRIBUTION OF '/data/sheet.csv']
+Stripe 001:
+  Disk 1: [block 002: FILE_INODE file '/data/sheet.csv']
+  Disk 2: [PARITY: XOR(block 002, block 003)]
+  Disk 3: [block 003: DATA '/data/sheet.csv' (block 1 - 4096 bytes used)]
+Stripe 002:
+  Disk 1: [PARITY: XOR(block 004, block 005)]
+  Disk 2: [block 004: DATA '/data/sheet.csv' (block 2 - 4096 bytes used)]
+  Disk 3: [block 005: free]
+
+> fail_disk 2
+[SIMULATED FAILURE] Disk 2 failed and its contents were wiped.
+RAID 5 is degraded: blocks on Disk 2 are rebuilt by XOR of the other disks when read.
+
+> raid_status /data/sheet.csv
+Active array: RAID 5 (3 physical disks, 4 KB blocks) | capacity: 400 blocks (1600 KB)
+Disk 1: OK | Disk 2: FAILED | Disk 3: OK
+
+[I/O - DISK DISTRIBUTION OF '/data/sheet.csv']
+Stripe 001:
+  Disk 1: [block 002: FILE_INODE file '/data/sheet.csv']
+  Disk 2: [PARITY: XOR(block 002, block 003)] (lost: disk failed)
+  Disk 3: [block 003: DATA '/data/sheet.csv' (block 1 - 4096 bytes used)]
+Stripe 002:
+  Disk 1: [PARITY: XOR(block 004, block 005)]
+  Disk 2: [block 004: DATA '/data/sheet.csv' (block 2 - 4096 bytes used)] (lost: disk failed)
+  Disk 3: [block 005: free]
+
+[RAID 5] Disk 2 has failed: block 1 rebuilt by XOR of Disk 1 and Disk 3 [OK] (x2)
+
+> read_file /data/sheet.csv
+'/data/sheet.csv': 8192 bytes (8 KB); first 64 bytes:
+00000000  41 42 43 44 45 46 47 48  49 4a 4b 4c 4d 4e 4f 50  |ABCDEFGHIJKLMNOP|
+00000010  51 52 53 54 55 56 57 58  59 5a 41 42 43 44 45 46  |QRSTUVWXYZABCDEF|
+00000020  47 48 49 4a 4b 4c 4d 4e  4f 50 51 52 53 54 55 56  |GHIJKLMNOPQRSTUV|
+00000030  57 58 59 5a 41 42 43 44  45 46 47 48 49 4a 4b 4c  |WXYZABCDEFGHIJKL|
+
+[RAID 5] Disk 2 has failed: block 1 rebuilt by XOR of Disk 1 and Disk 3 [OK] (x2)
+[RAID 5] Disk 2 has failed: block 4 rebuilt by XOR of Disk 1 and Disk 3 [OK]
+
+> rebuild
+[RAID 5 REBUILD] Disk 2 replaced: 200 blocks rebuilt by XOR of Disk 1 and Disk 3 [OK]
+
+> raid_status /data/sheet.csv
+Active array: RAID 5 (3 physical disks, 4 KB blocks) | capacity: 400 blocks (1600 KB)
+Disk 1: OK | Disk 2: OK | Disk 3: OK
+
+[I/O - DISK DISTRIBUTION OF '/data/sheet.csv']
+Stripe 001:
+  Disk 1: [block 002: FILE_INODE file '/data/sheet.csv']
+  Disk 2: [PARITY: XOR(block 002, block 003)]
+  Disk 3: [block 003: DATA '/data/sheet.csv' (block 1 - 4096 bytes used)]
+Stripe 002:
+  Disk 1: [PARITY: XOR(block 004, block 005)]
+  Disk 2: [block 004: DATA '/data/sheet.csv' (block 2 - 4096 bytes used)]
+  Disk 3: [block 005: free]
+
