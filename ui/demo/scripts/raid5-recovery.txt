@@ -1,12 +1,13 @@
 # preset: stage2
-# Reference Example 2.2: RAID 5 distribution, disk failure and XOR recovery.
+# RAID 5: block distribution, disk failure and XOR recovery.
 #
 # An 8 KB file on a RAID 5 of 3 disks, then a forced failure of Disk 2
-# and its recovery by XOR.
-# The trace is turned off: this example is about where blocks land, not
-# about head movement. Differences from the reference: the directory and
-# the file's inode also take blocks, so the file's data lands in a later
-# stripe, and the stripe holding it has its parity on another disk.
+# and its recovery by XOR. The trace is turned off: this scenario is about
+# where blocks land, not about head movement.
+#
+# Difference from the course specification: the directory and the file's
+# inode also take blocks, so the file's data lands in a later stripe, whose
+# parity is on another disk.
 io_trace off
 mkdir /data
 create /data/sheet.csv --size 8KB

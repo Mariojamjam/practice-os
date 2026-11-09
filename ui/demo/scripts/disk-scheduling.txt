@@ -1,5 +1,5 @@
 # preset: stage2
-# Reference Example 2.1: SSTF disk-arm scheduling.
+# Disk-arm scheduling: SSTF compared with FCFS, SCAN and C-SCAN.
 #
 # The queue 98, 183, 37, 122, 14 with the head at track 53, followed by
 # the same queue under the other algorithms for comparison (SCAN and
