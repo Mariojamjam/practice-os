@@ -69,3 +69,44 @@ func Tokenize(line string) ([]string, error) {
 	}
 	return words, nil
 }
+
+// SplitCommands splits a line into commands separated by ';', ignoring
+// separators inside quotes or escaped with a backslash. Empty commands are
+// dropped; quoting is kept for Tokenize.
+func SplitCommands(line string) ([]string, error) {
+	var (
+		cmds    []string
+		cur     strings.Builder
+		quote   rune
+		escaped bool
+	)
+	flush := func() {
+		if c := strings.TrimSpace(cur.String()); c != "" {
+			cmds = append(cmds, c)
+		}
+		cur.Reset()
+	}
+	for _, r := range line {
+		switch {
+		case escaped:
+			escaped = false
+		case r == '\\' && quote != '\'':
+			escaped = true
+		case quote != 0:
+			if r == quote {
+				quote = 0
+			}
+		case r == '\'' || r == '"':
+			quote = r
+		case r == ';':
+			flush()
+			continue
+		}
+		cur.WriteRune(r)
+	}
+	if quote != 0 {
+		return nil, errors.Join(ErrSyntax, errors.New("unterminated quote"))
+	}
+	flush()
+	return cmds, nil
+}
