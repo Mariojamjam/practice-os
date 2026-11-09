@@ -1,0 +1,20 @@
+# Stage 2 — I/O, disk scheduling and RAID (reference examples 2.1 and 2.2):
+# a RAID 5 of 3 HDDs, each with 200 tracks of one 4 KB block, heads
+# starting at track 53, SSTF scheduling, and the I/O trace enabled.
+disk:
+  block_size: 4KB
+  blocks: 200
+  tracks: 200
+  blocks_per_track: 1
+fs:
+  alloc: indexed
+io:
+  device: raid
+  scheduler: sstf
+  head: 53
+  direction: up
+  trace: true
+raid:
+  level: 5
+  disks: 3
+  member: hdd

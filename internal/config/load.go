@@ -43,6 +43,10 @@ type Overrides struct {
 	BlockSize *int64
 	Blocks    *int
 	Alloc     *string
+	Device    *string
+	Disks     *int
+	Scheduler *string
+	Head      *int
 	ASCII     *bool
 }
 
@@ -152,6 +156,18 @@ func applyOverrides(cfg *Config, o Overrides) {
 	}
 	if o.Alloc != nil {
 		cfg.FS.Alloc = *o.Alloc
+	}
+	if o.Device != nil {
+		cfg.IO.Device = *o.Device
+	}
+	if o.Disks != nil {
+		cfg.RAID.Disks = *o.Disks
+	}
+	if o.Scheduler != nil {
+		cfg.IO.Scheduler = *o.Scheduler
+	}
+	if o.Head != nil {
+		cfg.IO.Head = *o.Head
 	}
 	if o.ASCII != nil {
 		cfg.UI.ASCII = *o.ASCII
