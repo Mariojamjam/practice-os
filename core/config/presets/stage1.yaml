@@ -1,4 +1,4 @@
-# Stage 1 — File System (reference examples 1.1 and 1.2):
+# Stage 1 — File System (scenarios directory-tree and indexed-allocation):
 # a 64 KB disk of 16 blocks of 4 KB, indexed (i-node) allocation.
 disk:
   block_size: 4KB

@@ -45,7 +45,7 @@ scripts and tests.
 | `ui/shell` | The single command interpreter; returns typed results |
 | `ui/render` | Results and I/O as text |
 | `ui/script` | Runs command sequences into transcripts |
-| `ui/demo` | Embedded scenarios (the reference examples and more) |
+| `ui/demo` | Embedded scenarios, one per mechanism, run by `demo` and the golden tests |
 | `ui/tui` | Bubble Tea interface |
 | `ui/cli` | Cobra commands and flags |
 

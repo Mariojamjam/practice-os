@@ -1,4 +1,5 @@
-# Stage 2 — I/O, disk scheduling and RAID (reference examples 2.1 and 2.2):
+# Stage 2 — I/O, disk scheduling and RAID (scenarios disk-scheduling and
+# raid5-recovery):
 # a RAID 5 of 3 HDDs, each with 200 tracks of one 4 KB block, heads
 # starting at track 53, SSTF scheduling, and the I/O trace enabled.
 disk:

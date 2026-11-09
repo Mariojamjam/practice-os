@@ -1,6 +1,6 @@
-// Package demo embeds the reference scenarios: the examples from the
-// course specification and a few more that show each mechanism. Each is
-// a script whose "# preset: NAME" comment picks its configuration
+// Package demo embeds the built-in scenarios, one per mechanism (the
+// course specification's examples among them), named by what they show.
+// Each is a script whose "# preset: NAME" comment picks its configuration
 // (stage1 when absent).
 package demo
 

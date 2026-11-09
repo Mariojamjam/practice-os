@@ -6,8 +6,9 @@
 # Precedence, lowest to highest:
 #   built-in defaults < preset < this file < command-line flags
 
-# A built-in starting point: stage1 (Examples 1.1 and 1.2) or stage2
-# (Examples 2.1 and 2.2). The keys below refine it.
+# A built-in starting point: stage1 (file system: 16 blocks of 4 KB,
+# indexed) or stage2 (I/O: RAID 5 of 3 HDDs, SSTF). The keys below refine
+# it.
 preset: stage1
 
 # Seed for anything random, so runs are reproducible.

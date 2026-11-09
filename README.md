@@ -53,7 +53,7 @@ container is created.
 practice-os --preset stage1      # terminal UI with the Stage 1 setup
 practice-os --preset stage2      # RAID 5 of 3 HDDs, SSTF, I/O trace on
 practice-os demo                 # list the built-in scenarios
-practice-os demo disk-scheduling # run reference Example 2.1
+practice-os demo disk-scheduling # SSTF vs FCFS, SCAN and C-SCAN
 ```
 
 In the terminal UI, type commands in the bar at the bottom, for example:
@@ -144,10 +144,10 @@ it.
 
 | Name | Scenario |
 |---|---|
-| `directory-tree` | Reference Example 1.1: the directory tree |
-| `indexed-allocation` | Reference Example 1.2: indexed allocation and fragmentation |
-| `disk-scheduling` | Reference Example 2.1: SSTF scheduling (208 tracks), compared with FCFS, SCAN and C-SCAN |
-| `raid5-recovery` | Reference Example 2.2: RAID 5 distribution, disk failure and XOR recovery |
+| `directory-tree` | Creating directories and a file, then displaying the tree |
+| `indexed-allocation` | Indexed allocation: the block map and fragmentation analysis |
+| `disk-scheduling` | SSTF scheduling (208 tracks), compared with FCFS, SCAN and C-SCAN |
+| `raid5-recovery` | RAID 5 block distribution, disk failure and XOR recovery |
 | `contiguous-fragmentation` | External fragmentation blocking a file until `compact` |
 | `linked-fat` | A growing file's FAT chain skipping over another file |
 | `fs-io-trace` | File-system commands issuing disk requests, served by SSTF |

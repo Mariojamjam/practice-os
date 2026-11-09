@@ -1,5 +1,5 @@
 // Package script runs sequences of shell commands (script files, -c
-// arguments, demos) and writes a transcript in the reference-example
+// arguments, demos) and writes a transcript in the course specification's
 // format: each command echoed as "> command", followed by its output.
 package script
 
