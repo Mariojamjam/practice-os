@@ -58,6 +58,9 @@ type Options struct {
 	Path string
 	// Dir is where the default config file is looked up ("." if empty).
 	Dir string
+	// NoFile ignores config files: only defaults, the preset and
+	// overrides apply.
+	NoFile bool
 	// Overrides are applied last.
 	Overrides Overrides
 }
@@ -115,6 +118,9 @@ func Load(opts Options) (Config, error) {
 }
 
 func readConfigFile(opts Options) ([]byte, error) {
+	if opts.NoFile {
+		return nil, nil
+	}
 	path := opts.Path
 	explicit := path != ""
 	if !explicit {
