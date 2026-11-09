@@ -81,7 +81,7 @@ type Reserver interface {
 
 // Strategies lists the available strategy names.
 func Strategies() []string {
-	return []string{Contiguous}
+	return []string{Contiguous, Linked}
 }
 
 // New creates the named strategy over dev, using bm as the free-block map,
@@ -90,6 +90,8 @@ func New(name string, dev device.Device, bm *Bitmap) (Allocator, error) {
 	switch name {
 	case Contiguous:
 		return &contiguous{dev: dev, bm: bm}, nil
+	case Linked:
+		return newLinked(dev, bm)
 	default:
 		return nil, fmt.Errorf("%w: %q", ErrUnknownStrategy, name)
 	}
