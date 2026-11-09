@@ -239,3 +239,18 @@ func TestIOValidation(t *testing.T) {
 		t.Errorf("RAID 0 of two SSDs: %v", err)
 	}
 }
+
+func TestAnimation(t *testing.T) {
+	cfg, err := config.Load(config.Options{Dir: t.TempDir(), Overrides: config.Overrides{Animation: ptr("fast")}})
+	if err != nil || cfg.UI.Animation != "fast" {
+		t.Errorf("override: %q, %v", cfg.UI.Animation, err)
+	}
+	if config.Default().UI.Animation != "normal" {
+		t.Error("default animation")
+	}
+	dir := t.TempDir()
+	writeFile(t, dir, "ui:\n  animation: warp\n")
+	if _, err := config.Load(config.Options{Dir: dir}); !errors.Is(err, config.ErrInvalidConfig) {
+		t.Errorf("bad animation: %v", err)
+	}
+}
