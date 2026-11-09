@@ -24,8 +24,9 @@ var (
 
 // Shell executes command lines against a kernel.
 type Shell struct {
-	k      *kernel.Kernel
-	lastIO []blockio.Flush
+	k       *kernel.Kernel
+	lastIO  []blockio.Flush
+	flushed []blockio.Flush
 }
 
 // New returns a shell bound to k.
@@ -79,16 +80,25 @@ func Commands() []string {
 // showing). It is empty while requests are deferred.
 func (s *Shell) LastIO() []blockio.Flush { return s.lastIO }
 
+// Flushed returns every flush of the last Exec, whatever the trace
+// setting: what each device served when the command ended (or, for
+// io_flush, what the command itself served).
+func (s *Shell) Flushed() []blockio.Flush { return s.flushed }
+
 // Exec runs one command line. Blank lines and comments return (nil, nil);
 // so do commands that succeed silently, like mkdir.
 //
 // Unless the kernel defers I/O, the requests the command issued are
 // flushed when it ends; see LastIO.
 func (s *Shell) Exec(line string) (Result, error) {
-	s.lastIO = nil
+	s.lastIO, s.flushed = nil, nil
 	res, err := s.exec(line)
 	if !s.k.Defer {
-		s.lastIO = s.visibleIO(s.k.Flush())
+		s.flushed = s.k.Flush()
+		s.lastIO = s.visibleIO(s.flushed)
+	}
+	if r, ok := res.(IOResult); ok && !r.Pending {
+		s.flushed = append(r.Flushes, s.flushed...)
 	}
 	return res, err
 }
