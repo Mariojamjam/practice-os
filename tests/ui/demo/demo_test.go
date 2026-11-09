@@ -58,17 +58,18 @@ func TestGolden(t *testing.T) {
 }
 
 func TestFind(t *testing.T) {
-	for _, name := range []string{"1.2", "example-1.2"} {
-		d, err := demo.Find(name)
-		if err != nil || d.Name != "example-1.2" || d.Preset != "stage1" {
-			t.Errorf("Find(%q) = %+v, %v", name, d, err)
-		}
+	d, err := demo.Find("indexed-allocation")
+	if err != nil || d.Preset != "stage1" || !strings.HasPrefix(d.Title, "Reference Example 1.2") {
+		t.Errorf("Find(indexed-allocation) = %+v, %v", d, err)
 	}
-	d, err := demo.Find("2.2")
+	d, err = demo.Find("raid5-recovery")
 	if err != nil || d.Preset != "stage2" || !strings.HasPrefix(d.Title, "Reference Example 2.2") || len(d.Commands()) == 0 {
-		t.Errorf("Find(2.2) = %+v, %v", d, err)
+		t.Errorf("Find(raid5-recovery) = %+v, %v", d, err)
 	}
-	if _, err := demo.Find("9.9"); err == nil || !strings.Contains(err.Error(), "example-1.1") {
+	if _, err := demo.Find("2.2"); err == nil {
+		t.Error("numbers are not demo names")
+	}
+	if _, err := demo.Find("nope"); err == nil || !strings.Contains(err.Error(), "directory-tree") {
 		t.Errorf("unknown demo: %v", err)
 	}
 }

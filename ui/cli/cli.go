@@ -46,7 +46,7 @@ func NewRootCmd() *cobra.Command {
 			"  practice-os -c \"mkdir /docs; create /docs/a.txt --size 10KB; fs_status --details\"\n" +
 			"  practice-os shell --image session.json\n" +
 			"  practice-os run scenario.txt\n" +
-			"  practice-os demo 2.1",
+			"  practice-os demo disk-scheduling",
 		Args:          cobra.NoArgs,
 		SilenceUsage:  true,
 		SilenceErrors: false,

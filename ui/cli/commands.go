@@ -93,7 +93,7 @@ func newDemoCmd(f *flags) *cobra.Command {
 		Use:   "demo [NAME|all]",
 		Short: "Run the reference examples and other built-in scenarios (list them without NAME)",
 		Long: "Runs a built-in scenario with its own preset and prints its transcript.\n" +
-			"Reference examples can be named by number: 1.1, 1.2, 2.1, 2.2.\n" +
+			"Titles say which reference example each scenario reproduces.\n" +
 			"Configuration flags and --image are ignored; --ascii applies.",
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

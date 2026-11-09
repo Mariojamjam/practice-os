@@ -21,7 +21,7 @@ const DefaultPreset = "stage1"
 
 // Demo is one embedded scenario.
 type Demo struct {
-	// Name is the script name, e.g. "example-1.2".
+	// Name is the script name, e.g. "indexed-allocation".
 	Name string
 	// Title is the first comment line, describing the scenario.
 	Title string
@@ -52,11 +52,10 @@ func All() []Demo {
 	return out
 }
 
-// Find returns the scenario with the given name. Reference examples can
-// also be named by their number: "1.2" is "example-1.2".
+// Find returns the scenario with the given name.
 func Find(name string) (Demo, error) {
 	for _, d := range All() {
-		if d.Name == name || d.Name == "example-"+name {
+		if d.Name == name {
 			return d, nil
 		}
 	}

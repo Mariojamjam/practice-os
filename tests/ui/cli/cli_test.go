@@ -77,18 +77,18 @@ func TestShellReadsStdin(t *testing.T) {
 
 func TestDemo(t *testing.T) {
 	list, _, err := run(t, "", "demo")
-	if err != nil || !strings.Contains(list, "example-2.1") || !strings.Contains(list, "[preset stage2]") {
+	if err != nil || !strings.Contains(list, "disk-scheduling") || !strings.Contains(list, "[preset stage2]") {
 		t.Errorf("demo list: %q, %v", list, err)
 	}
-	out, _, err := run(t, "", "demo", "2.1")
-	if err != nil || !strings.Contains(out, "=== example-2.1") || !strings.Contains(out, "= 208 tracks") {
-		t.Errorf("demo 2.1: %v\n%s", err, out)
+	out, _, err := run(t, "", "demo", "disk-scheduling")
+	if err != nil || !strings.Contains(out, "=== disk-scheduling") || !strings.Contains(out, "= 208 tracks") {
+		t.Errorf("demo disk-scheduling: %v\n%s", err, out)
 	}
 	all, _, err := run(t, "", "demo", "all", "--ascii")
 	if err != nil || strings.Count(all, "=== ") < 7 || strings.Contains(all, "└──") {
 		t.Errorf("demo all: %v", err)
 	}
-	if _, _, err := run(t, "", "demo", "9.9"); err == nil {
+	if _, _, err := run(t, "", "demo", "2.1"); err == nil {
 		t.Error("unknown demo: want error")
 	}
 }
