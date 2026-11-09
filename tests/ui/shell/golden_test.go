@@ -18,7 +18,7 @@ var update = flag.Bool("update", false, "rewrite the golden files with the curre
 // TestGolden runs every testdata/golden/NAME.txt script through the shell
 // and compares the transcript with NAME.golden. Scripts use the stage1
 // preset unless a "# preset: NAME" comment says otherwise.
-// Regenerate with: go test ./tests/shell -update
+// Regenerate with: go test ./tests/ui/shell -update
 func TestGolden(t *testing.T) {
 	scripts, err := filepath.Glob(filepath.Join("testdata", "golden", "*.txt"))
 	if err != nil || len(scripts) == 0 {
