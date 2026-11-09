@@ -165,6 +165,55 @@ func (s *SSD) Discard() {
 	s.erased = 0
 }
 
+// State is everything needed to restore an SSD.
+type State struct {
+	Pages    [][]byte          `json:"pages"`
+	FTL      []int64           `json:"ftl"`
+	Erases   []int             `json:"erases"`
+	Programs []int             `json:"programs"`
+	Erased   int               `json:"erased,omitempty"`
+	Pending  []blockio.Request `json:"pending,omitempty"`
+}
+
+// State returns the flash contents, the FTL, wear counters and queue.
+func (s *SSD) State() State {
+	w := s.Wear()
+	return State{
+		Pages: s.flash.Blocks(), FTL: w.Mapping, Erases: w.Erases, Programs: w.Programs,
+		Erased: s.erased, Pending: s.q.Pending(),
+	}
+}
+
+// SetState restores a state returned by State on an SSD of the same size.
+func (s *SSD) SetState(st State) error {
+	physical := int(s.flash.BlockCount())
+	if len(st.FTL) != int(s.logical) || len(st.Erases) != physical || len(st.Programs) != physical {
+		return fmt.Errorf("%w: saved SSD state does not match %d logical blocks on %d pages",
+			disk.ErrOutOfRange, s.logical, physical)
+	}
+	owner := make([]int64, physical)
+	for i := range owner {
+		owner[i] = Unmapped
+	}
+	for l, p := range st.FTL {
+		if p == Unmapped {
+			continue
+		}
+		if p < 0 || p >= int64(physical) || owner[p] != Unmapped {
+			return fmt.Errorf("%w: FTL maps block %d to page %d", disk.ErrOutOfRange, l, p)
+		}
+		owner[p] = int64(l)
+	}
+	if err := s.flash.SetBlocks(st.Pages); err != nil {
+		return err
+	}
+	s.ftl, s.owner = append([]int64(nil), st.FTL...), owner
+	s.erases, s.programs = append([]int(nil), st.Erases...), append([]int(nil), st.Programs...)
+	s.erased = st.Erased
+	s.q.Set(st.Pending)
+	return nil
+}
+
 // SetMuted implements blockio.Muter.
 func (s *SSD) SetMuted(m bool) { s.q.SetMuted(m) }
 

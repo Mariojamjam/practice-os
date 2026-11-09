@@ -132,5 +132,32 @@ func (h *HDD) Pending() []blockio.Flush {
 // Discard drops queued requests.
 func (h *HDD) Discard() { h.q.Drain() }
 
+// State is everything needed to restore an HDD.
+type State struct {
+	Blocks    [][]byte          `json:"blocks"`
+	Head      int               `json:"head"`
+	Direction sched.Direction   `json:"direction"`
+	Pending   []blockio.Request `json:"pending,omitempty"`
+}
+
+// State returns the drive's contents, head and queued requests.
+func (h *HDD) State() State {
+	return State{Blocks: h.d.Blocks(), Head: h.head, Direction: h.dir, Pending: h.q.Pending()}
+}
+
+// SetState restores a state returned by State on a drive with the same
+// geometry.
+func (h *HDD) SetState(s State) error {
+	if s.Head < 0 || s.Head >= h.cfg.Tracks || (s.Direction != sched.Up && s.Direction != sched.Down) {
+		return fmt.Errorf("%w: saved head at track %d moving %d", ErrInvalid, s.Head, s.Direction)
+	}
+	if err := h.d.SetBlocks(s.Blocks); err != nil {
+		return err
+	}
+	h.head, h.dir = s.Head, s.Direction
+	h.q.Set(s.Pending)
+	return nil
+}
+
 // SetMuted implements blockio.Muter.
 func (h *HDD) SetMuted(m bool) { h.q.SetMuted(m) }

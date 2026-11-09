@@ -51,6 +51,9 @@ func (q *Queue) Len() int { return len(q.reqs) }
 // Pending returns a copy of the pending requests.
 func (q *Queue) Pending() []Request { return append([]Request(nil), q.reqs...) }
 
+// Set replaces the pending requests, for restoring a saved queue.
+func (q *Queue) Set(reqs []Request) { q.reqs = append([]Request(nil), reqs...) }
+
 // Drain removes and returns every pending request.
 func (q *Queue) Drain() []Request {
 	r := q.reqs

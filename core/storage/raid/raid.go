@@ -308,6 +308,28 @@ func (r *RAID) Discard() {
 	}
 }
 
+// State is the array's own state; each disk saves its own.
+type State struct {
+	Failed []bool          `json:"failed"`
+	Events []blockio.Event `json:"events,omitempty"`
+}
+
+// State returns which disks failed and the pending events.
+func (r *RAID) State() State {
+	return State{Failed: append([]bool(nil), r.failed...), Events: append([]blockio.Event(nil), r.events...)}
+}
+
+// SetState restores a state returned by State on an array with as many
+// disks.
+func (r *RAID) SetState(s State) error {
+	if len(s.Failed) != len(r.disks) {
+		return fmt.Errorf("%w: saved state has %d disks, the array has %d", ErrInvalid, len(s.Failed), len(r.disks))
+	}
+	r.failed = append([]bool(nil), s.Failed...)
+	r.events = append([]blockio.Event(nil), s.Events...)
+	return nil
+}
+
 // SetMuted implements blockio.Muter for the array and its disks.
 func (r *RAID) SetMuted(m bool) {
 	r.muted = m

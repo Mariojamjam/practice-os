@@ -62,6 +62,32 @@ func (d *Disk) Write(b int64, data []byte) error {
 	return nil
 }
 
+// Blocks returns a copy of every block, for saving the disk.
+func (d *Disk) Blocks() [][]byte {
+	out := make([][]byte, len(d.blocks))
+	for i, b := range d.blocks {
+		out[i] = append([]byte(nil), b...)
+	}
+	return out
+}
+
+// SetBlocks replaces the content of every block, for restoring a saved
+// disk. The number and size of blocks must match.
+func (d *Disk) SetBlocks(blocks [][]byte) error {
+	if len(blocks) != len(d.blocks) {
+		return fmt.Errorf("%w: %d blocks saved, disk has %d", ErrOutOfRange, len(blocks), len(d.blocks))
+	}
+	for i, b := range blocks {
+		if len(b) != d.blockSize {
+			return fmt.Errorf("block %d: %w (%d bytes saved, blocks have %d)", i, ErrTooLarge, len(b), d.blockSize)
+		}
+	}
+	for i, b := range blocks {
+		copy(d.blocks[i], b)
+	}
+	return nil
+}
+
 func (d *Disk) check(b int64) error {
 	if b < 0 || b >= int64(len(d.blocks)) {
 		return fmt.Errorf("block %d: %w (disk has %d blocks)", b, ErrOutOfRange, len(d.blocks))
