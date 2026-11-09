@@ -21,3 +21,10 @@ go.work.sum
 *.swp
 .DS_Store
 Thumbs.db
+
+# Root build output
+/practice-os
+/practice-os.exe
+
+# Personal simulator config (template: practice-os.example.yaml)
+practice-os.yaml
