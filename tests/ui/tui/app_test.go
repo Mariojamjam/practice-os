@@ -175,3 +175,41 @@ func TestViewInEveryTab(t *testing.T) {
 		}
 	}
 }
+
+func TestASCIIViewIsPureASCII(t *testing.T) {
+	cfg := config.Default()
+	cfg.IO.Device = config.DeviceRAID
+	k, err := kernel.New(cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	a := tui.New(k, tui.Options{ASCII: true, Animation: "off"})
+	a.Exec("create /f --size 8KB")
+	a.Exec("fail_disk 2")
+	a.Exec("sched --queue 9,2,14")
+	for range a.Tabs() {
+		for _, r := range ansiStrip(a.View().Content) {
+			if r > 127 {
+				t.Fatalf("tab %s draws non-ASCII %q", a.Tab(), r)
+			}
+		}
+		a.Update(key(tea.KeyTab))
+	}
+}
+
+// ansiStrip removes terminal escape sequences.
+func ansiStrip(s string) string {
+	var b strings.Builder
+	esc := false
+	for _, r := range s {
+		switch {
+		case r == 0x1b:
+			esc = true
+		case esc && (r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z'):
+			esc = false
+		case !esc:
+			b.WriteRune(r)
+		}
+	}
+	return b.String()
+}
