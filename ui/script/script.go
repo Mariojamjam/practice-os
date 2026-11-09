@@ -35,23 +35,32 @@ func Preset(src string) string {
 	return ""
 }
 
+// Output runs one command line with sh and returns what it printed: its
+// result or error, then its I/O (when traced, or RAID events). The text
+// ends with a newline unless it is empty.
+func Output(sh *shell.Shell, line string, o render.Options) (string, error) {
+	res, err := sh.Exec(line)
+	out := render.Result(res, o)
+	if err != nil {
+		out = render.Error(err)
+	}
+	if io := render.IO(sh.LastIO(), o); io != "" {
+		if out != "" {
+			out += "\n"
+		}
+		out += io
+	}
+	return out, err
+}
+
 // Run executes each command with sh and writes the transcript to w: the
-// echoed command, its output, its I/O (when traced, or RAID events) and a
-// blank line. Every command runs even if an earlier one fails; Run returns
-// how many failed.
+// echoed command, its output and a blank line. Every command runs even if
+// an earlier one fails; Run returns how many failed.
 func Run(sh *shell.Shell, commands []string, w io.Writer, o render.Options) (failed int, err error) {
 	for _, line := range commands {
-		res, cmdErr := sh.Exec(line)
-		out := render.Result(res, o)
+		out, cmdErr := Output(sh, line, o)
 		if cmdErr != nil {
 			failed++
-			out = render.Error(cmdErr)
-		}
-		if io := render.IO(sh.LastIO(), o); io != "" {
-			if out != "" {
-				out += "\n"
-			}
-			out += io
 		}
 		if out != "" {
 			out += "\n"
