@@ -37,6 +37,32 @@ practice-os <command> [args] [flags]
 | `go run install.go -dir DIR` | install into `DIR` instead |
 | `go run install.go -uninstall` | remove the installed binary |
 
+## Usage
+
+```
+practice-os                    open the terminal UI (default settings)
+practice-os --preset stage1    Stage 1 examples: 16 blocks of 4 KB, indexed allocation
+practice-os --preset stage2    Stage 2 examples: RAID 5 of 3 HDDs, SSTF, I/O trace on
+practice-os --device ssd       any setting can be overridden; see practice-os --help
+```
+
+The UI has three views (FS, I/O and RAID/SSD; `tab` switches) above a
+command log and a command bar. Commands follow the reference spec, for
+example:
+
+```
+mkdir /system
+create /system/logs.txt --size 10KB
+write_file /system/logs.txt "New record"
+fs_status --details
+sched --queue 98,183,37,122,14 --head 53 --alg sstf
+fail_disk 2
+rebuild
+```
+
+`↑`/`↓` browse the command history, `pgup`/`pgdn` scroll the log and
+`ctrl+c` quits.
+
 The repository also ships a devcontainer with Go included: open it in VS
 Code (or any Dev Containers client) and `practice-os` is installed when the
 container is created.
