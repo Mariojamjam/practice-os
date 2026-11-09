@@ -254,3 +254,12 @@ func TestAnimation(t *testing.T) {
 		t.Errorf("bad animation: %v", err)
 	}
 }
+
+func TestNoFile(t *testing.T) {
+	dir := t.TempDir()
+	writeFile(t, dir, "disk:\n  blocks: 64\n")
+	cfg, err := config.Load(config.Options{Dir: dir, NoFile: true, Overrides: config.Overrides{Preset: ptr("stage1")}})
+	if err != nil || cfg.Disk.Blocks != 16 {
+		t.Errorf("NoFile read the config file: %d blocks, %v", cfg.Disk.Blocks, err)
+	}
+}
