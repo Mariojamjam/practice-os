@@ -52,6 +52,18 @@ func Result(r shell.Result, o Options) string {
 		}
 	case shell.CompactResult:
 		compaction(&b, r.CompactResult)
+	case shell.SchedResult:
+		schedResult(&b, r)
+	case shell.IOResult:
+		ioResult(&b, r)
+	case shell.RAIDStatusResult:
+		raidStatus(&b, r)
+	case shell.FailResult:
+		failResult(&b, r)
+	case shell.RebuildResult:
+		rebuildResult(&b, r)
+	case shell.WearResult:
+		wearResult(&b, r)
 	default:
 		fmt.Fprintf(&b, "%v\n", r)
 	}
