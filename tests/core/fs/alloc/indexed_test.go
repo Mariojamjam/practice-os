@@ -11,7 +11,8 @@ import (
 func TestIndexed(t *testing.T) {
 	a, bm, d := newAlloc(t, alloc.Indexed, 4096, 16)
 
-	// Example 1.2: a 10 KB file takes an inode block, then 3 data blocks.
+	// As in the indexed-allocation scenario: a 10 KB file takes an inode
+	// block, then 3 data blocks.
 	f := &alloc.Inode{Size: 10240}
 	if err := a.Allocate(f, 3); err != nil {
 		t.Fatal(err)

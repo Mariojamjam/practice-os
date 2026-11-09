@@ -49,7 +49,8 @@ func TestParityLayout(t *testing.T) {
 	if got := fmt.Sprint(parityDisks(r5)); got != "[2 1 0 2]" {
 		t.Errorf("RAID 5 parity disks = %s", got)
 	}
-	// Example 2.2: blocks 0 and 1 on disks 1 and 2, parity on disk 3.
+	// As in the course specification: blocks 0 and 1 on disks 1 and 2,
+	// parity on disk 3.
 	s0 := r5.Stripe(0)
 	if s0[0].Block != 0 || s0[1].Block != 1 || !s0[2].Parity {
 		t.Errorf("stripe 0 = %+v", s0)

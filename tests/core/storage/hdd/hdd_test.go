@@ -55,7 +55,7 @@ func TestQueueAndSchedule(t *testing.T) {
 		t.Errorf("first request = %+v", r)
 	}
 
-	// Example 2.1: SSTF from track 53.
+	// The disk-scheduling scenario: SSTF from track 53.
 	flushes := h.Flush()
 	if len(flushes) != 1 || flushes[0].Sched == nil || flushes[0].Sched.Total != 208 {
 		t.Fatalf("flush = %+v", flushes)

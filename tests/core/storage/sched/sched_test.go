@@ -25,7 +25,7 @@ func schedule(t *testing.T, alg sched.Algorithm, head int, dir sched.Direction, 
 	return r
 }
 
-// Reference Example 2.1.
+// The course specification's SSTF queue (the disk-scheduling scenario).
 func TestExample21SSTF(t *testing.T) {
 	r := schedule(t, sched.SSTF, 53, sched.Up, []int{98, 183, 37, 122, 14})
 	if got, want := tracksOf(r), []int{37, 14, 98, 122, 183}; !reflect.DeepEqual(got, want) {

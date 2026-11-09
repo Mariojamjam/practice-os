@@ -33,7 +33,7 @@ func kinds(r diag.Report) []diag.BlockKind {
 	return out
 }
 
-// Example 1.2: /system/logs/app.log of 10 KB with indexed allocation.
+// The indexed-allocation scenario: /system/logs/app.log of 10 KB.
 func TestAnalyzeIndexedExample(t *testing.T) {
 	f := newFS(t, alloc.Indexed)
 	must(t, f.Mkdir("/system"))
