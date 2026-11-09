@@ -1,0 +1,12 @@
+# Linked allocation: a file's blocks chained through the FAT.
+#
+# The FAT occupies block 00 and chains each file's
+# blocks. When report.txt grows, its chain continues past notes.txt, so
+# the file is no longer contiguous, and that is fine.
+set_alloc linked
+mkdir /docs
+create /docs/report.txt --size 6KB
+create /notes.txt "first line"
+write_file /docs/report.txt --size 14KB
+fs_status --details
+read_file /notes.txt

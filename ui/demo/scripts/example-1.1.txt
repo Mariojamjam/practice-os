@@ -1,0 +1,7 @@
+# Reference Example 1.1: creating and displaying the directory tree.
+# The reference shows the tree right after `create`; here it is printed
+# explicitly with `tree`.
+mkdir /system
+mkdir /system/logs
+create /system/logs/app.log --size 10KB
+tree

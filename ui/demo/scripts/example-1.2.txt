@@ -1,0 +1,9 @@
+# Reference Example 1.2: indexed allocation and fragmentation analysis.
+# Difference from the reference: every directory occupies a metadata block
+# (the reference shows one only for '/'), so /system and /system/logs take
+# blocks 01 and 02, and the file's inode and data blocks start two blocks
+# later than in the reference.
+mkdir /system
+mkdir /system/logs
+create /system/logs/app.log --size 10KB
+fs_status --details

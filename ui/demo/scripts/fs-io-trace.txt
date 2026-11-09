@@ -1,0 +1,15 @@
+# File-system operations issuing disk requests on one HDD.
+#
+# Stage 2 integration: every file-system operation issues
+# block requests, which the disk-arm scheduler (SSTF) serves when the
+# command ends. With io_defer on, requests from several commands pile up
+# and are served together by io_flush.
+io_trace on
+mkdir /logs
+create /logs/app.log --size 10KB
+write_file /logs/app.log "New record"
+io_defer on
+create /logs/a.txt "first"
+create /logs/b.txt "second"
+io_queue
+io_flush
