@@ -106,3 +106,48 @@ func TestSSDCapacity(t *testing.T) {
 		t.Errorf("logical %d, physical %d", s.BlockCount(), s.Wear().Physical)
 	}
 }
+
+func TestInspectIsSilent(t *testing.T) {
+	for _, device := range config.Devices {
+		t.Run(device, func(t *testing.T) {
+			k := newKernel(t, func(c *config.Config) { c.IO.Device, c.IO.Defer = device, true })
+			if err := k.FS.Create("/f", []byte("data")); err != nil {
+				t.Fatal(err)
+			}
+			if r, ok := k.RAID(); ok {
+				if err := r.Fail(0); err != nil {
+					t.Fatal(err)
+				}
+			}
+			before := count(k.Pending())
+			err := k.Inspect(func() error {
+				data, err := k.FS.Read("/f") // a degraded read on the RAID
+				if err == nil && string(data) != "data" {
+					t.Errorf("read %q", data)
+				}
+				return err
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if after := count(k.Pending()); after != before {
+				t.Errorf("Inspect queued work: %d -> %d", before, after)
+			}
+			if _, err := k.FS.Read("/f"); err != nil {
+				t.Fatal(err)
+			}
+			if after := count(k.Pending()); after <= before {
+				t.Error("recording did not resume after Inspect")
+			}
+		})
+	}
+}
+
+// count totals pending requests and RAID events.
+func count(flushes []blockio.Flush) int {
+	n := 0
+	for _, f := range flushes {
+		n += len(f.Requests) + len(f.Events)
+	}
+	return n
+}
