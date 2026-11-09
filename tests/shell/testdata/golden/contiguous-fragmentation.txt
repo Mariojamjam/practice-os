@@ -1,0 +1,17 @@
+# Contiguous allocation: deleting files leaves holes (external
+# fragmentation); a file larger than the largest hole cannot be stored
+# even though there is enough free space in total, until `compact` packs
+# the used blocks together.
+set_alloc contiguous
+create /a.bin --size 8KB
+create /b.bin --size 12KB
+create /c.bin --size 8KB
+create /d.bin --size 16KB
+create /e.bin --size 8KB
+rm /b.bin
+rm /d.bin
+fs_status --details
+create /big.bin --size 20KB
+compact
+create /big.bin --size 20KB
+fs_status

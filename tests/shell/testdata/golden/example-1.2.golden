@@ -1,0 +1,26 @@
+> mkdir /system
+> mkdir /system/logs
+> create /system/logs/app.log --size 10KB
+> fs_status --details
+Block size: 4 KB | Total blocks: 16 (64 KB)
+
+[DISK ALLOCATION MAP (indexed)]
+Block 00 [ROOT_INODE] : directory '/'
+Block 01 [DIR_INODE]  : directory '/system'
+Block 02 [DIR_INODE]  : directory '/system/logs'
+Block 03 [FILE_INODE] : file '/system/logs/app.log'
+Block 04 [DATA]       : '/system/logs/app.log' (block 1 - 4096 bytes used)
+Block 05 [DATA]       : '/system/logs/app.log' (block 2 - 4096 bytes used)
+Block 06 [DATA]       : '/system/logs/app.log' (block 3 - 2048 bytes used)
+Block 07..15          : [FREE]
+
+--- FRAGMENTATION REPORT ---
+File '/system/logs/app.log'
+  Size                   : 10240 bytes (10 KB)
+  Allocated on disk      : 12288 bytes (3 blocks of 4 KB)
+  Internal fragmentation : 2048 bytes (50% waste in block 06)
+Total internal fragmentation : 2048 bytes
+External fragmentation       : 0 bytes
+Metadata overhead            : 4 blocks (16 KB)
+Compaction needed            : NO (indexed allocation: files need not be contiguous)
+

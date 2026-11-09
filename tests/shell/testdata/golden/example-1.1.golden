@@ -1,0 +1,10 @@
+> mkdir /system
+> mkdir /system/logs
+> create /system/logs/app.log --size 10KB
+> tree
+[FILE SYSTEM TREE]
+/
+└── system/ [DIR]
+    └── logs/ [DIR]
+        └── app.log (10 KB) [FILE]
+

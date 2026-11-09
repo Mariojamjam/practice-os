@@ -1,0 +1,38 @@
+> set_alloc linked
+Allocation strategy is now linked; the disk was formatted.
+
+> mkdir /docs
+> create /docs/report.txt --size 6KB
+> create /notes.txt "first line"
+> write_file /docs/report.txt --size 14KB
+> fs_status --details
+Block size: 4 KB | Total blocks: 16 (64 KB)
+
+[DISK ALLOCATION MAP (linked)]
+Block 00 [FAT]      : file allocation table
+Block 01 [ROOT_DIR] : directory '/'
+Block 02 [DIR]      : directory '/docs'
+Block 03 [DATA]     : '/docs/report.txt' (block 1 - 4096 bytes used, next: 04)
+Block 04 [DATA]     : '/docs/report.txt' (block 2 - 4096 bytes used, next: 06)
+Block 05 [DATA]     : '/notes.txt' (block 1 - 10 bytes used, end of chain)
+Block 06 [DATA]     : '/docs/report.txt' (block 3 - 4096 bytes used, next: 07)
+Block 07 [DATA]     : '/docs/report.txt' (block 4 - 2048 bytes used, end of chain)
+Block 08..15        : [FREE]
+
+--- FRAGMENTATION REPORT ---
+File '/docs/report.txt'
+  Size                   : 14336 bytes (14 KB)
+  Allocated on disk      : 16384 bytes (4 blocks of 4 KB)
+  Internal fragmentation : 2048 bytes (50% waste in block 07)
+File '/notes.txt'
+  Size                   : 10 bytes (10 B)
+  Allocated on disk      : 4096 bytes (1 block of 4 KB)
+  Internal fragmentation : 4086 bytes (99.8% waste in block 05)
+Total internal fragmentation : 6134 bytes
+External fragmentation       : 0 bytes
+Metadata overhead            : 3 blocks (12 KB)
+Compaction needed            : NO (linked allocation: files need not be contiguous)
+
+> read_file /notes.txt
+first line
+

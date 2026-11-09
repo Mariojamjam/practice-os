@@ -1,0 +1,62 @@
+> set_alloc contiguous
+Allocation strategy is now contiguous; the disk was formatted.
+
+> create /a.bin --size 8KB
+> create /b.bin --size 12KB
+> create /c.bin --size 8KB
+> create /d.bin --size 16KB
+> create /e.bin --size 8KB
+> rm /b.bin
+> rm /d.bin
+> fs_status --details
+Block size: 4 KB | Total blocks: 16 (64 KB)
+
+[DISK ALLOCATION MAP (contiguous)]
+Block 00 [ROOT_DIR] : directory '/'
+Block 01 [DATA]     : '/a.bin' (block 1 - 4096 bytes used)
+Block 02 [DATA]     : '/a.bin' (block 2 - 4096 bytes used)
+Block 03..05        : [FREE]
+Block 06 [DATA]     : '/c.bin' (block 1 - 4096 bytes used)
+Block 07 [DATA]     : '/c.bin' (block 2 - 4096 bytes used)
+Block 08..11        : [FREE]
+Block 12 [DATA]     : '/e.bin' (block 1 - 4096 bytes used)
+Block 13 [DATA]     : '/e.bin' (block 2 - 4096 bytes used)
+Block 14..15        : [FREE]
+
+--- FRAGMENTATION REPORT ---
+File '/a.bin'
+  Size                   : 8192 bytes (8 KB)
+  Allocated on disk      : 8192 bytes (2 blocks of 4 KB)
+  Internal fragmentation : 0 bytes
+File '/c.bin'
+  Size                   : 8192 bytes (8 KB)
+  Allocated on disk      : 8192 bytes (2 blocks of 4 KB)
+  Internal fragmentation : 0 bytes
+File '/e.bin'
+  Size                   : 8192 bytes (8 KB)
+  Allocated on disk      : 8192 bytes (2 blocks of 4 KB)
+  Internal fragmentation : 0 bytes
+Total internal fragmentation : 0 bytes
+External fragmentation       : 20480 bytes (9 free blocks in 3 runs; largest run: 4 blocks)
+Metadata overhead            : 1 block (4 KB)
+Compaction needed            : YES (free space is split into 3 runs; a file larger than 4 blocks cannot be stored; run 'compact')
+
+> create /big.bin --size 20KB
+error: /big.bin: no contiguous run of free blocks large enough (external fragmentation)
+
+> compact
+[DISK COMPACTION]
+Moved '/c.bin': blocks 06..07 -> 03..04
+Moved '/e.bin': blocks 12..13 -> 05..06
+Free space: 9 blocks in 1 run; largest run: 9 blocks (36 KB)
+External fragmentation: 20480 bytes -> 0 bytes
+
+> create /big.bin --size 20KB
+> fs_status
+Allocation strategy: contiguous
+Block size: 4 KB | Total blocks: 16 (64 KB)
+Used blocks: 12 (1 metadata, 11 data) | Free blocks: 4
+Internal fragmentation: 0 bytes
+External fragmentation: 0 bytes (free space is contiguous)
+Compaction needed: NO (free space is contiguous)
+
