@@ -40,9 +40,13 @@ func (a *App) View() tea.View {
 	body = lipgloss.NewStyle().Width(w).Height(h).MaxWidth(w).MaxHeight(h).Render(body)
 	sep := styleMuted.Render(strings.Repeat(a.glyphs().axis, w))
 
-	v := tea.NewView(lipgloss.JoinVertical(lipgloss.Left,
+	frame := lipgloss.JoinVertical(lipgloss.Left,
 		a.header(), a.tabBar(), sep, body, sep, a.log.View(), a.input.View(), a.help(),
-	))
+	)
+	if a.opts.ASCII {
+		frame = asciiText.Replace(frame)
+	}
+	v := tea.NewView(frame)
 	v.AltScreen = true
 	v.WindowTitle = "practice-os"
 	return v
@@ -97,6 +101,10 @@ func (a *App) help() string {
 	return styleMuted.Width(a.width).MaxWidth(a.width).Render(
 		"enter run · tab/shift+tab switch view · ↑/↓ history · pgup/pgdn scroll log · esc skip animation · ctrl+c quit")
 }
+
+// asciiText replaces the decorative characters used in labels with plain
+// ASCII when --ascii is set (block and path glyphs come from glyphs).
+var asciiText = strings.NewReplacer("·", "-", "→", "->", "✗", "x", "…", "...", "↑/↓", "up/down", "—", "-", "│", "|")
 
 func onOffWord(b bool) string {
 	if b {

@@ -50,7 +50,11 @@ func (a *App) blockMap(w, h int) string {
 
 	b.WriteString(a.legend() + "\n")
 	used := r.TotalBlocks - r.FreeBlocks
-	fmt.Fprintf(&b, "Used %d blocks (%d metadata, %d data) · %d free\n", used, r.MetaBlocks, used-r.MetaBlocks, r.FreeBlocks)
+	unit := "blocks"
+	if used == 1 {
+		unit = "block"
+	}
+	fmt.Fprintf(&b, "Used %d %s (%d metadata, %d data) · %d free\n", used, unit, r.MetaBlocks, used-r.MetaBlocks, r.FreeBlocks)
 	fmt.Fprintf(&b, "Internal fragmentation %d B · external fragmentation %d B\n", r.Internal, r.External)
 	b.WriteString(compactionLine(r))
 	return lipgloss.NewStyle().MaxWidth(w).Render(b.String())
