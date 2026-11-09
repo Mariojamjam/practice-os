@@ -148,3 +148,20 @@ func TestSSDWear(t *testing.T) {
 		t.Error("raid_status on an SSD: want error")
 	}
 }
+
+func TestFlushed(t *testing.T) {
+	s := shellWith(t, func(*config.Config) {})
+	exec(t, s, "mkdir /a")
+	if s.LastIO() != nil || len(s.Flushed()) != 1 || s.Flushed()[0].Sched == nil {
+		t.Errorf("trace off: LastIO %v, Flushed %+v", s.LastIO(), s.Flushed())
+	}
+	exec(t, s, "io_defer on")
+	exec(t, s, "mkdir /b")
+	if s.Flushed() != nil {
+		t.Error("deferred: nothing is flushed")
+	}
+	exec(t, s, "io_flush")
+	if f := s.Flushed(); len(f) != 1 || len(f[0].Requests) == 0 {
+		t.Errorf("io_flush: Flushed = %+v", f)
+	}
+}
