@@ -1,7 +1,23 @@
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+# Build output
+/bin/
+/dist/
+*.exe
+*.test
+*.out
+
+# Coverage
+coverage.*
+*.coverprofile
+
+# Simulator state images
+*.img
+
+# Workspace files
+go.work
+go.work.sum
+
+# Editors / OS
+.idea/
+*.swp
 .DS_Store
 Thumbs.db
-*.tmp
