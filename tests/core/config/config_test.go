@@ -263,3 +263,15 @@ func TestNoFile(t *testing.T) {
 		t.Errorf("NoFile read the config file: %d blocks, %v", cfg.Disk.Blocks, err)
 	}
 }
+
+// The commented template at the repository root must stay loadable.
+func TestExampleFile(t *testing.T) {
+	path := filepath.Join("..", "..", "..", "practice-os.example.yaml")
+	cfg, err := config.Load(config.Options{Path: path})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if cfg.Preset != "stage1" || cfg.Disk.Blocks != 16 || cfg.IO.Device != config.DeviceHDD {
+		t.Errorf("example config = %+v", cfg)
+	}
+}

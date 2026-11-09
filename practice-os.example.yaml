@@ -1,0 +1,45 @@
+# practice-os configuration template.
+#
+# Copy it to practice-os.yaml (ignored by git) in the directory you run
+# practice-os from, or pass it with --config FILE. Every key is optional.
+#
+# Precedence, lowest to highest:
+#   built-in defaults < preset < this file < command-line flags
+
+# A built-in starting point: stage1 (Examples 1.1 and 1.2) or stage2
+# (Examples 2.1 and 2.2). The keys below refine it.
+preset: stage1
+
+# Seed for anything random, so runs are reproducible.
+seed: 42
+
+# Each physical disk. In a RAID array, every member has this geometry.
+disk:
+  block_size: 4KB        # power of two from 512B to 64KB; KB = 1024 bytes
+  blocks: 16             # blocks per disk
+  tracks: 0              # HDD tracks; 0 = blocks / blocks_per_track
+  blocks_per_track: 1
+
+# File system.
+fs:
+  alloc: indexed         # contiguous | linked (FAT) | indexed (i-node)
+
+# Storage device and I/O queue.
+io:
+  device: hdd            # hdd | ssd | raid
+  scheduler: sstf        # HDD disk-arm algorithm: fcfs | sstf | scan | cscan
+  head: 0                # initial head track
+  direction: up          # initial head direction (matters to scan and cscan)
+  defer: false           # keep requests queued across commands until io_flush
+  trace: false           # print each command's requests and their scheduling
+
+# Disk array, used when io.device is raid.
+raid:
+  level: 5               # 0 | 1 | 4 | 5
+  disks: 3               # 2+ for levels 0 and 1, 3+ for levels 4 and 5
+  member: hdd            # hdd | ssd
+
+# Presentation.
+ui:
+  ascii: false           # plain ASCII instead of box-drawing characters
+  animation: normal      # TUI animations: off | slow | normal | fast
