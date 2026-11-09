@@ -10,8 +10,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/Mariojamjam/practice-os/internal/alloc"
-	"github.com/Mariojamjam/practice-os/internal/device"
+	"github.com/Mariojamjam/practice-os/core/fs/alloc"
+	"github.com/Mariojamjam/practice-os/core/storage/device"
 )
 
 var (

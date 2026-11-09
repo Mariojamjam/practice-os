@@ -8,11 +8,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/config"
-	"github.com/Mariojamjam/practice-os/internal/device/ssd"
-	"github.com/Mariojamjam/practice-os/internal/diag"
-	"github.com/Mariojamjam/practice-os/internal/sched"
+	"github.com/Mariojamjam/practice-os/core/config"
+	"github.com/Mariojamjam/practice-os/core/fs/diag"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/sched"
+	"github.com/Mariojamjam/practice-os/core/storage/ssd"
 	"github.com/Mariojamjam/practice-os/internal/shell"
 )
 

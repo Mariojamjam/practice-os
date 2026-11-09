@@ -7,7 +7,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
-	"github.com/Mariojamjam/practice-os/internal/config"
+	"github.com/Mariojamjam/practice-os/core/config"
 )
 
 // Fixed rows: header, tab bar, two separators, input and help line.

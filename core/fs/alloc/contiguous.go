@@ -1,6 +1,6 @@
 package alloc
 
-import "github.com/Mariojamjam/practice-os/internal/device"
+import "github.com/Mariojamjam/practice-os/core/storage/device"
 
 // contiguous stores each file in one run of adjacent blocks, chosen
 // first-fit. The directory entry stores Ref{A: start, B: count}.

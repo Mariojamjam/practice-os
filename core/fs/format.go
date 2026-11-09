@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/Mariojamjam/practice-os/internal/alloc"
+	"github.com/Mariojamjam/practice-os/core/fs/alloc"
 )
 
 // Directory block layout (little-endian):

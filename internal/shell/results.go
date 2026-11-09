@@ -1,12 +1,12 @@
 package shell
 
 import (
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/device/ssd"
-	"github.com/Mariojamjam/practice-os/internal/diag"
-	"github.com/Mariojamjam/practice-os/internal/fs"
-	"github.com/Mariojamjam/practice-os/internal/raid"
-	"github.com/Mariojamjam/practice-os/internal/sched"
+	"github.com/Mariojamjam/practice-os/core/fs"
+	"github.com/Mariojamjam/practice-os/core/fs/diag"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/raid"
+	"github.com/Mariojamjam/practice-os/core/storage/sched"
+	"github.com/Mariojamjam/practice-os/core/storage/ssd"
 )
 
 // Result is the typed outcome of a command. Interfaces decide how to show

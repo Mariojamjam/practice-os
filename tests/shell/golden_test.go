@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/config"
-	"github.com/Mariojamjam/practice-os/internal/kernel"
+	"github.com/Mariojamjam/practice-os/core/config"
+	"github.com/Mariojamjam/practice-os/core/kernel"
 	"github.com/Mariojamjam/practice-os/internal/render"
 	"github.com/Mariojamjam/practice-os/internal/shell"
 )

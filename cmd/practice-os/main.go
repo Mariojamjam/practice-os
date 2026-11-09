@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Mariojamjam/practice-os/internal/config"
-	"github.com/Mariojamjam/practice-os/internal/kernel"
+	"github.com/Mariojamjam/practice-os/core/config"
+	"github.com/Mariojamjam/practice-os/core/kernel"
 	"github.com/Mariojamjam/practice-os/internal/tui"
 )
 

@@ -9,9 +9,9 @@ package ssd
 import (
 	"fmt"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/device"
-	"github.com/Mariojamjam/practice-os/internal/disk"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/device"
+	"github.com/Mariojamjam/practice-os/core/storage/disk"
 )
 
 // Unmapped marks a logical block that was never written.

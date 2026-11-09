@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"github.com/Mariojamjam/practice-os/internal/config"
-	"github.com/Mariojamjam/practice-os/internal/diag"
-	"github.com/Mariojamjam/practice-os/internal/fs"
+	"github.com/Mariojamjam/practice-os/core/config"
+	"github.com/Mariojamjam/practice-os/core/fs"
+	"github.com/Mariojamjam/practice-os/core/fs/diag"
 )
 
 // fsCommands are the file-system commands (Stage 1).

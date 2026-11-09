@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/alloc"
+	"github.com/Mariojamjam/practice-os/core/fs/alloc"
 )
 
 func TestIndexed(t *testing.T) {

@@ -5,7 +5,7 @@ import (
 
 	"charm.land/lipgloss/v2"
 
-	"github.com/Mariojamjam/practice-os/internal/diag"
+	"github.com/Mariojamjam/practice-os/core/fs/diag"
 )
 
 // Colors use the 16 basic ANSI colors so they follow the terminal theme.

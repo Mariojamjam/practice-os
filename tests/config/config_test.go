@@ -2,7 +2,7 @@ package config_test
 
 import (
 	"errors"
-	"github.com/Mariojamjam/practice-os/internal/config"
+	"github.com/Mariojamjam/practice-os/core/config"
 	"os"
 	"path/filepath"
 	"testing"

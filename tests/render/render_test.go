@@ -4,9 +4,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/alloc"
-	"github.com/Mariojamjam/practice-os/internal/diag"
-	"github.com/Mariojamjam/practice-os/internal/fs"
+	"github.com/Mariojamjam/practice-os/core/fs"
+	"github.com/Mariojamjam/practice-os/core/fs/alloc"
+	"github.com/Mariojamjam/practice-os/core/fs/diag"
 	"github.com/Mariojamjam/practice-os/internal/render"
 	"github.com/Mariojamjam/practice-os/internal/shell"
 )

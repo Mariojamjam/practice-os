@@ -6,12 +6,12 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/device"
-	"github.com/Mariojamjam/practice-os/internal/device/hdd"
-	"github.com/Mariojamjam/practice-os/internal/disk"
-	"github.com/Mariojamjam/practice-os/internal/raid"
-	"github.com/Mariojamjam/practice-os/internal/sched"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/device"
+	"github.com/Mariojamjam/practice-os/core/storage/disk"
+	"github.com/Mariojamjam/practice-os/core/storage/hdd"
+	"github.com/Mariojamjam/practice-os/core/storage/raid"
+	"github.com/Mariojamjam/practice-os/core/storage/sched"
 )
 
 const blockSize = 64

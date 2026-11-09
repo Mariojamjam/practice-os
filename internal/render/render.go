@@ -9,10 +9,10 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/Mariojamjam/practice-os/internal/alloc"
-	"github.com/Mariojamjam/practice-os/internal/config"
-	"github.com/Mariojamjam/practice-os/internal/diag"
-	"github.com/Mariojamjam/practice-os/internal/fs"
+	"github.com/Mariojamjam/practice-os/core/config"
+	"github.com/Mariojamjam/practice-os/core/fs"
+	"github.com/Mariojamjam/practice-os/core/fs/alloc"
+	"github.com/Mariojamjam/practice-os/core/fs/diag"
 	"github.com/Mariojamjam/practice-os/internal/shell"
 )
 

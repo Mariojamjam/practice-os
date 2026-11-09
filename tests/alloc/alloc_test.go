@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/alloc"
-	"github.com/Mariojamjam/practice-os/internal/disk"
+	"github.com/Mariojamjam/practice-os/core/fs/alloc"
+	"github.com/Mariojamjam/practice-os/core/storage/disk"
 )
 
 func newAlloc(t *testing.T, name string, blockSize int, blocks int64) (alloc.Allocator, *alloc.Bitmap, *disk.Disk) {

@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/alloc"
-	"github.com/Mariojamjam/practice-os/internal/disk"
+	"github.com/Mariojamjam/practice-os/core/fs/alloc"
+	"github.com/Mariojamjam/practice-os/core/storage/disk"
 )
 
 // fatEntry reads the FAT entry of block b straight from the disk: one

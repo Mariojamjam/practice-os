@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/Mariojamjam/practice-os/internal/device"
+	"github.com/Mariojamjam/practice-os/core/storage/device"
 )
 
 // Inode block layout (little-endian):

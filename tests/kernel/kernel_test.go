@@ -3,11 +3,11 @@ package kernel_test
 import (
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/config"
-	"github.com/Mariojamjam/practice-os/internal/device/hdd"
-	"github.com/Mariojamjam/practice-os/internal/device/ssd"
-	"github.com/Mariojamjam/practice-os/internal/kernel"
+	"github.com/Mariojamjam/practice-os/core/config"
+	"github.com/Mariojamjam/practice-os/core/kernel"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/hdd"
+	"github.com/Mariojamjam/practice-os/core/storage/ssd"
 )
 
 func newKernel(t *testing.T, edit func(*config.Config)) *kernel.Kernel {

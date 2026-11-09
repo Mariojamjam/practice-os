@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"github.com/Mariojamjam/practice-os/internal/diag"
-	"github.com/Mariojamjam/practice-os/internal/raid"
-	"github.com/Mariojamjam/practice-os/internal/sched"
+	"github.com/Mariojamjam/practice-os/core/fs/diag"
+	"github.com/Mariojamjam/practice-os/core/storage/raid"
+	"github.com/Mariojamjam/practice-os/core/storage/sched"
 )
 
 // ioCommands are the I/O, scheduling, RAID and SSD commands (Stage 2).

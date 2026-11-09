@@ -3,7 +3,7 @@ package raid
 import (
 	"fmt"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
 )
 
 // Parity layout. Each stripe s holds N-1 data blocks and one parity block,

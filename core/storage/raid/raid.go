@@ -9,8 +9,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/device"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/device"
 )
 
 var (

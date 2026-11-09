@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/device"
-	"github.com/Mariojamjam/practice-os/internal/disk"
-	"github.com/Mariojamjam/practice-os/internal/sched"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/device"
+	"github.com/Mariojamjam/practice-os/core/storage/disk"
+	"github.com/Mariojamjam/practice-os/core/storage/sched"
 )
 
 // ErrInvalid reports an unusable HDD configuration.

@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/disk"
-	"github.com/Mariojamjam/practice-os/internal/raid"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/disk"
+	"github.com/Mariojamjam/practice-os/core/storage/raid"
 )
 
 // checkParity verifies, straight from the disks, that every stripe's

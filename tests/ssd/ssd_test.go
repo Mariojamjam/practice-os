@@ -5,9 +5,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/device/ssd"
-	"github.com/Mariojamjam/practice-os/internal/disk"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/disk"
+	"github.com/Mariojamjam/practice-os/core/storage/ssd"
 )
 
 func TestSpare(t *testing.T) {

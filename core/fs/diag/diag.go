@@ -4,8 +4,8 @@
 package diag
 
 import (
-	"github.com/Mariojamjam/practice-os/internal/alloc"
-	"github.com/Mariojamjam/practice-os/internal/fs"
+	"github.com/Mariojamjam/practice-os/core/fs"
+	"github.com/Mariojamjam/practice-os/core/fs/alloc"
 )
 
 // BlockKind is the role of a disk block.

@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
 )
 
 func TestQueue(t *testing.T) {

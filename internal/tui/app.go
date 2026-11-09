@@ -10,8 +10,8 @@ import (
 	"charm.land/bubbles/v2/viewport"
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/kernel"
+	"github.com/Mariojamjam/practice-os/core/kernel"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
 	"github.com/Mariojamjam/practice-os/internal/render"
 	"github.com/Mariojamjam/practice-os/internal/shell"
 )

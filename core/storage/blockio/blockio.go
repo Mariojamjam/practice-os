@@ -7,7 +7,7 @@
 // order chosen by the disk-arm scheduler and how far the head moves.
 package blockio
 
-import "github.com/Mariojamjam/practice-os/internal/sched"
+import "github.com/Mariojamjam/practice-os/core/storage/sched"
 
 // Op is a request type.
 type Op byte

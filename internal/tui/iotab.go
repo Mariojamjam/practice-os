@@ -6,9 +6,9 @@ import (
 
 	"charm.land/lipgloss/v2"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/sched"
 	"github.com/Mariojamjam/practice-os/internal/render"
-	"github.com/Mariojamjam/practice-os/internal/sched"
 )
 
 // ioView draws the last I/O each device served: the disk-arm path of each

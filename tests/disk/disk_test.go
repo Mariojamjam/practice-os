@@ -3,7 +3,7 @@ package disk_test
 import (
 	"bytes"
 	"errors"
-	"github.com/Mariojamjam/practice-os/internal/disk"
+	"github.com/Mariojamjam/practice-os/core/storage/disk"
 	"testing"
 )
 

@@ -8,8 +8,8 @@ import (
 
 	"charm.land/lipgloss/v2"
 
-	"github.com/Mariojamjam/practice-os/internal/device/ssd"
-	"github.com/Mariojamjam/practice-os/internal/diag"
+	"github.com/Mariojamjam/practice-os/core/fs/diag"
+	"github.com/Mariojamjam/practice-os/core/storage/ssd"
 )
 
 // raidView shows the array's disks side by side, stripe by stripe, and

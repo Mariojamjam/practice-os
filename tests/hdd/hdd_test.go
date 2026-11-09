@@ -4,10 +4,10 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/device/hdd"
-	"github.com/Mariojamjam/practice-os/internal/disk"
-	"github.com/Mariojamjam/practice-os/internal/sched"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/disk"
+	"github.com/Mariojamjam/practice-os/core/storage/hdd"
+	"github.com/Mariojamjam/practice-os/core/storage/sched"
 )
 
 func newHDD(t *testing.T, c hdd.Config, blocks int64) *hdd.HDD {

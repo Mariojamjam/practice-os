@@ -11,8 +11,8 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/kernel"
+	"github.com/Mariojamjam/practice-os/core/kernel"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
 )
 
 var (

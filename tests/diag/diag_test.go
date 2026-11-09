@@ -1,12 +1,12 @@
 package diag_test
 
 import (
-	"github.com/Mariojamjam/practice-os/internal/diag"
+	"github.com/Mariojamjam/practice-os/core/fs/diag"
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/alloc"
-	"github.com/Mariojamjam/practice-os/internal/disk"
-	"github.com/Mariojamjam/practice-os/internal/fs"
+	"github.com/Mariojamjam/practice-os/core/fs"
+	"github.com/Mariojamjam/practice-os/core/fs/alloc"
+	"github.com/Mariojamjam/practice-os/core/storage/disk"
 )
 
 func newFS(t *testing.T, strategy string) *fs.FS {

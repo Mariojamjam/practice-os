@@ -3,12 +3,12 @@ package tui
 import (
 	"slices"
 
-	"github.com/Mariojamjam/practice-os/internal/blockio"
-	"github.com/Mariojamjam/practice-os/internal/device/ssd"
-	"github.com/Mariojamjam/practice-os/internal/diag"
-	"github.com/Mariojamjam/practice-os/internal/fs"
-	"github.com/Mariojamjam/practice-os/internal/kernel"
-	"github.com/Mariojamjam/practice-os/internal/raid"
+	"github.com/Mariojamjam/practice-os/core/fs"
+	"github.com/Mariojamjam/practice-os/core/fs/diag"
+	"github.com/Mariojamjam/practice-os/core/kernel"
+	"github.com/Mariojamjam/practice-os/core/storage/blockio"
+	"github.com/Mariojamjam/practice-os/core/storage/raid"
+	"github.com/Mariojamjam/practice-os/core/storage/ssd"
 	"github.com/Mariojamjam/practice-os/internal/shell"
 )
 
