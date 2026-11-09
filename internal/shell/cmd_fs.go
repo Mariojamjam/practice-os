@@ -11,8 +11,8 @@ import (
 	"github.com/Mariojamjam/practice-os/internal/fs"
 )
 
-// commands holds every shell command, by name.
-var commands = map[string]command{
+// fsCommands are the file-system commands (Stage 1).
+var fsCommands = map[string]command{
 	"pwd": {
 		usage: "pwd",
 		run: func(s *Shell, _ *pflag.FlagSet, _ []string) (Result, error) {

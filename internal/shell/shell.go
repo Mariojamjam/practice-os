@@ -11,6 +11,7 @@ import (
 
 	"github.com/spf13/pflag"
 
+	"github.com/Mariojamjam/practice-os/internal/blockio"
 	"github.com/Mariojamjam/practice-os/internal/kernel"
 )
 
@@ -23,7 +24,8 @@ var (
 
 // Shell executes command lines against a kernel.
 type Shell struct {
-	k *kernel.Kernel
+	k      *kernel.Kernel
+	lastIO []blockio.Flush
 }
 
 // New returns a shell bound to k.
@@ -44,6 +46,19 @@ type command struct {
 	run  func(s *Shell, fl *pflag.FlagSet, args []string) (Result, error)
 }
 
+// commands holds every shell command, by name.
+var commands = merge(fsCommands, ioCommands)
+
+func merge(sets ...map[string]command) map[string]command {
+	out := map[string]command{}
+	for _, set := range sets {
+		for name, c := range set {
+			out[name] = c
+		}
+	}
+	return out
+}
+
 // aliases maps alternative names to command names.
 var aliases = map[string]string{
 	"cat": "read_file",
@@ -59,9 +74,39 @@ func Commands() []string {
 	return names
 }
 
+// LastIO returns the I/O of the last Exec: every flush when the kernel's
+// trace is on, otherwise only RAID events (failures are always worth
+// showing). It is empty while requests are deferred.
+func (s *Shell) LastIO() []blockio.Flush { return s.lastIO }
+
 // Exec runs one command line. Blank lines and comments return (nil, nil);
 // so do commands that succeed silently, like mkdir.
+//
+// Unless the kernel defers I/O, the requests the command issued are
+// flushed when it ends; see LastIO.
 func (s *Shell) Exec(line string) (Result, error) {
+	s.lastIO = nil
+	res, err := s.exec(line)
+	if !s.k.Defer {
+		s.lastIO = s.visibleIO(s.k.Flush())
+	}
+	return res, err
+}
+
+func (s *Shell) visibleIO(flushes []blockio.Flush) []blockio.Flush {
+	if s.k.Trace {
+		return flushes
+	}
+	var events []blockio.Flush
+	for _, f := range flushes {
+		if len(f.Events) > 0 {
+			events = append(events, f)
+		}
+	}
+	return events
+}
+
+func (s *Shell) exec(line string) (Result, error) {
 	words, err := Tokenize(line)
 	if err != nil || len(words) == 0 {
 		return nil, err
