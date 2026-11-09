@@ -88,6 +88,55 @@ func (f *FS) Format(strategy string) error {
 	return f.writeDir(root, nil)
 }
 
+// State is the in-memory controller state of a file system: everything
+// else lives on the device.
+type State struct {
+	Strategy string  `json:"strategy"`
+	Root     int64   `json:"root"`
+	Cwd      string  `json:"cwd"`
+	Used     []int64 `json:"used"`
+}
+
+// State returns the controller state, for saving it.
+func (f *FS) State() State {
+	s := State{Strategy: f.Strategy(), Root: f.root, Cwd: f.cwd}
+	for b := range f.bm.Len() {
+		if !f.bm.IsFree(b) {
+			s.Used = append(s.Used, b)
+		}
+	}
+	return s
+}
+
+// Open mounts a file system already on dev, from a saved State, without
+// writing anything. A working directory that no longer exists falls back
+// to the root.
+func Open(dev device.Device, s State) (*FS, error) {
+	n := dev.BlockCount()
+	bm := alloc.NewBitmap(n)
+	for _, b := range s.Used {
+		if b < 0 || b >= n {
+			return nil, fmt.Errorf("%w: used block %d outside the disk", ErrCorrupt, b)
+		}
+		bm.Set(b)
+	}
+	if s.Root < 0 || s.Root >= n || bm.IsFree(s.Root) {
+		return nil, fmt.Errorf("%w: root block %d is not in use", ErrCorrupt, s.Root)
+	}
+	al, err := alloc.Open(s.Strategy, dev, bm)
+	if err != nil {
+		return nil, err
+	}
+	f := &FS{dev: dev, bm: bm, al: al, root: s.Root, cwd: "/"}
+	if _, err := f.readDir(s.Root); err != nil {
+		return nil, err
+	}
+	if s.Cwd != "" && f.Chdir(s.Cwd) != nil {
+		f.cwd = "/"
+	}
+	return f, nil
+}
+
 // SetStrategy changes the allocation strategy. The disk must be empty.
 func (f *FS) SetStrategy(strategy string) error {
 	entries, err := f.readDir(f.root)

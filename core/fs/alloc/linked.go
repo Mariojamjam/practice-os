@@ -26,24 +26,35 @@ type linked struct {
 }
 
 func newLinked(dev device.Device, bm *Bitmap) (*linked, error) {
-	n, bs := dev.BlockCount(), int64(dev.BlockSize())
-	reserved := (n*4 + bs - 1) / bs
-	if reserved >= n {
-		return nil, fmt.Errorf("%w: the FAT needs %d of %d blocks", ErrNoSpace, reserved, n)
+	l, err := openLinked(dev, bm)
+	if err != nil {
+		return nil, err
 	}
-	l := &linked{dev: dev, bm: bm, reserved: reserved}
-	for b := range reserved {
-		bm.Set(b)
+	for b := range l.reserved {
 		if err := dev.Write(b, nil); err != nil {
 			return nil, err
 		}
 	}
-	for b := range reserved {
+	for b := range l.reserved {
 		if err := l.set(b, FATReserved); err != nil {
 			return nil, err
 		}
 	}
 	return l, nil
+}
+
+// openLinked attaches to a FAT already on the device and reserves its
+// blocks in bm.
+func openLinked(dev device.Device, bm *Bitmap) (*linked, error) {
+	n, bs := dev.BlockCount(), int64(dev.BlockSize())
+	reserved := (n*4 + bs - 1) / bs
+	if reserved >= n {
+		return nil, fmt.Errorf("%w: the FAT needs %d of %d blocks", ErrNoSpace, reserved, n)
+	}
+	for b := range reserved {
+		bm.Set(b)
+	}
+	return &linked{dev: dev, bm: bm, reserved: reserved}, nil
 }
 
 func (l *linked) Name() string { return Linked }

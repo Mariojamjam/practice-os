@@ -99,6 +99,22 @@ func New(name string, dev device.Device, bm *Bitmap) (Allocator, error) {
 	}
 }
 
+// Open attaches the named strategy to a device that already holds its
+// structures (a restored disk), without writing anything. bm must already
+// mark the used blocks.
+func Open(name string, dev device.Device, bm *Bitmap) (Allocator, error) {
+	switch name {
+	case Contiguous:
+		return &contiguous{dev: dev, bm: bm}, nil
+	case Linked:
+		return openLinked(dev, bm)
+	case Indexed:
+		return &indexed{dev: dev, bm: bm}, nil
+	default:
+		return nil, fmt.Errorf("%w: %q", ErrUnknownStrategy, name)
+	}
+}
+
 // allocMeta is the AllocMeta implementation shared by strategies that keep
 // no per-block table.
 func allocMeta(bm *Bitmap) (int64, error) {
