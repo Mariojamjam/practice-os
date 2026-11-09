@@ -8,7 +8,7 @@ import (
 	"github.com/Mariojamjam/practice-os/core/kernel"
 	"github.com/Mariojamjam/practice-os/core/storage/blockio"
 	"github.com/Mariojamjam/practice-os/core/storage/sched"
-	"github.com/Mariojamjam/practice-os/internal/shell"
+	"github.com/Mariojamjam/practice-os/ui/shell"
 )
 
 func shellWith(t *testing.T, edit func(*config.Config)) *shell.Shell {

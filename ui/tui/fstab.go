@@ -9,8 +9,8 @@ import (
 	"github.com/Mariojamjam/practice-os/core/config"
 	"github.com/Mariojamjam/practice-os/core/fs/alloc"
 	"github.com/Mariojamjam/practice-os/core/fs/diag"
-	"github.com/Mariojamjam/practice-os/internal/render"
-	"github.com/Mariojamjam/practice-os/internal/shell"
+	"github.com/Mariojamjam/practice-os/ui/render"
+	"github.com/Mariojamjam/practice-os/ui/shell"
 )
 
 // fsView shows the directory tree beside the disk block map.

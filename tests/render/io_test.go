@@ -7,8 +7,8 @@ import (
 	"github.com/Mariojamjam/practice-os/core/storage/blockio"
 	"github.com/Mariojamjam/practice-os/core/storage/sched"
 	"github.com/Mariojamjam/practice-os/core/storage/ssd"
-	"github.com/Mariojamjam/practice-os/internal/render"
-	"github.com/Mariojamjam/practice-os/internal/shell"
+	"github.com/Mariojamjam/practice-os/ui/render"
+	"github.com/Mariojamjam/practice-os/ui/shell"
 )
 
 func contains(t *testing.T, got string, wants ...string) {

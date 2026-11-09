@@ -11,7 +11,7 @@ import (
 	"github.com/Mariojamjam/practice-os/core/fs/alloc"
 	"github.com/Mariojamjam/practice-os/core/fs/diag"
 	"github.com/Mariojamjam/practice-os/core/storage/raid"
-	"github.com/Mariojamjam/practice-os/internal/shell"
+	"github.com/Mariojamjam/practice-os/ui/shell"
 )
 
 // explain returns a plain-language sentence about what a command did to

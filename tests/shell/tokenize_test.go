@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Mariojamjam/practice-os/internal/shell"
+	"github.com/Mariojamjam/practice-os/ui/shell"
 )
 
 func TestTokenize(t *testing.T) {

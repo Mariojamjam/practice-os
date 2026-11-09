@@ -8,7 +8,7 @@ import (
 
 	"github.com/Mariojamjam/practice-os/core/storage/blockio"
 	"github.com/Mariojamjam/practice-os/core/storage/sched"
-	"github.com/Mariojamjam/practice-os/internal/render"
+	"github.com/Mariojamjam/practice-os/ui/render"
 )
 
 // ioView draws the last I/O each device served: the disk-arm path of each

@@ -8,7 +8,7 @@ import (
 
 	"github.com/Mariojamjam/practice-os/core/config"
 	"github.com/Mariojamjam/practice-os/core/kernel"
-	"github.com/Mariojamjam/practice-os/internal/tui"
+	"github.com/Mariojamjam/practice-os/ui/tui"
 )
 
 func newApp(t *testing.T, edit func(*config.Config)) (*tui.App, *kernel.Kernel) {

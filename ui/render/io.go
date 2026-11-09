@@ -13,7 +13,7 @@ import (
 	"github.com/Mariojamjam/practice-os/core/storage/blockio"
 	"github.com/Mariojamjam/practice-os/core/storage/sched"
 	"github.com/Mariojamjam/practice-os/core/storage/ssd"
-	"github.com/Mariojamjam/practice-os/internal/shell"
+	"github.com/Mariojamjam/practice-os/ui/shell"
 )
 
 // IO renders the I/O flushes of a command (see shell.Shell.LastIO).

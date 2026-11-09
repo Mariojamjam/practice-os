@@ -12,8 +12,8 @@ import (
 
 	"github.com/Mariojamjam/practice-os/core/kernel"
 	"github.com/Mariojamjam/practice-os/core/storage/blockio"
-	"github.com/Mariojamjam/practice-os/internal/render"
-	"github.com/Mariojamjam/practice-os/internal/shell"
+	"github.com/Mariojamjam/practice-os/ui/render"
+	"github.com/Mariojamjam/practice-os/ui/shell"
 )
 
 // Tab names.

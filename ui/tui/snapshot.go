@@ -9,7 +9,7 @@ import (
 	"github.com/Mariojamjam/practice-os/core/storage/blockio"
 	"github.com/Mariojamjam/practice-os/core/storage/raid"
 	"github.com/Mariojamjam/practice-os/core/storage/ssd"
-	"github.com/Mariojamjam/practice-os/internal/shell"
+	"github.com/Mariojamjam/practice-os/ui/shell"
 )
 
 // snapshot is everything the tabs draw, read from the kernel with I/O

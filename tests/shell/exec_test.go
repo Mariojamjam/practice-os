@@ -6,7 +6,7 @@ import (
 
 	"github.com/Mariojamjam/practice-os/core/config"
 	"github.com/Mariojamjam/practice-os/core/kernel"
-	"github.com/Mariojamjam/practice-os/internal/shell"
+	"github.com/Mariojamjam/practice-os/ui/shell"
 )
 
 func newShell(t *testing.T) *shell.Shell {

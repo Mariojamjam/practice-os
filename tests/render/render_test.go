@@ -7,8 +7,8 @@ import (
 	"github.com/Mariojamjam/practice-os/core/fs"
 	"github.com/Mariojamjam/practice-os/core/fs/alloc"
 	"github.com/Mariojamjam/practice-os/core/fs/diag"
-	"github.com/Mariojamjam/practice-os/internal/render"
-	"github.com/Mariojamjam/practice-os/internal/shell"
+	"github.com/Mariojamjam/practice-os/ui/render"
+	"github.com/Mariojamjam/practice-os/ui/shell"
 )
 
 func TestTreeASCII(t *testing.T) {
