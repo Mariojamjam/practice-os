@@ -16,6 +16,10 @@ import (
 // the wear of any SSDs.
 func (a *App) raidView(w, h int) string {
 	var parts []string
+	if p := a.rebuildProgress(w); p != "" {
+		parts = append(parts, p)
+		h -= strings.Count(p, "\n") + 1
+	}
 	if a.snap.raid != nil {
 		parts = append(parts, a.raidColumns(w, h-len(a.snap.wear)-1))
 		for _, wr := range a.snap.wear {
@@ -54,7 +58,10 @@ func (a *App) raidColumns(w, h int) string {
 	for i, d := range v.disks {
 		var b strings.Builder
 		head := styleOK.Render(d.Name + " OK")
-		if d.Failed {
+		switch {
+		case a.rebuilding(i):
+			head = fg(colPartial).Render(d.Name + " REBUILDING")
+		case d.Failed:
 			head = styleFailed.Render(d.Name + " FAILED")
 		}
 		b.WriteString(head + "\n")

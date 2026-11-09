@@ -82,6 +82,7 @@ func (a *App) armPath(f blockio.Flush, w, rows int) string {
 		}
 		all = append(all, row{s.Track, glyph, note})
 	}
+	all = all[:a.armFrame(len(all))]
 	if len(all) > rows {
 		skipped := len(all) - rows
 		all = all[skipped:]

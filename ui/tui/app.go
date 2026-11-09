@@ -29,6 +29,8 @@ type Options struct {
 	ASCII bool
 	// Preset is shown in the header.
 	Preset string
+	// Animation is the animation speed: off, slow, normal (default) or fast.
+	Animation string
 }
 
 // App is the Bubble Tea model of the interface.
@@ -48,6 +50,9 @@ type App struct {
 
 	snap   snapshot
 	lastIO []blockio.Flush // last flushes that served requests, for the I/O tab
+
+	anim   *animation
+	animID int
 
 	width, height int
 }
@@ -106,15 +111,19 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		a.width, a.height = msg.Width, msg.Height
 		a.layout()
 		return a, nil
+	case animTick:
+		return a, a.advance(msg)
 	case tea.KeyPressMsg:
 		switch msg.String() {
 		case "ctrl+c", "ctrl+d":
 			return a, tea.Quit
+		case "esc":
+			a.anim = nil
+			return a, nil
 		case "enter":
 			line := a.input.Value()
 			a.input.Reset()
-			a.Exec(line)
-			return a, nil
+			return a, a.exec(line)
 		case "tab":
 			a.tab = (a.tab + 1) % len(a.tabs)
 			return a, nil
@@ -141,12 +150,16 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 // Exec runs one command line, logs its output and an explanation, and
-// refreshes every tab.
-func (a *App) Exec(line string) {
+// refreshes every tab. It returns the command that drives the animation
+// of what happened, if any.
+func (a *App) Exec(line string) tea.Cmd { return a.exec(line) }
+
+func (a *App) exec(line string) tea.Cmd {
 	line = strings.TrimSpace(line)
 	if line == "" {
-		return
+		return nil
 	}
+	a.anim = nil
 	a.history = append(a.history, line)
 	a.histPos = len(a.history)
 
@@ -163,8 +176,18 @@ func (a *App) Exec(line string) {
 		}
 		out += io
 	}
+	animate := false
 	if served(a.sh.Flushed()) {
-		a.lastIO = a.sh.Flushed()
+		a.lastIO, animate = a.sh.Flushed(), true
+	}
+	if r, ok := res.(shell.SchedResult); ok {
+		// A standalone schedule is drawn on the I/O tab like a served queue.
+		reqs := make([]blockio.Request, len(r.Requests))
+		for i, t := range r.Requests {
+			reqs[i] = blockio.Request{Op: blockio.Read, Block: int64(t), Track: int64(t)}
+		}
+		a.lastIO = []blockio.Flush{{Device: "sched", Kind: blockio.KindHDD, Requests: reqs, Sched: &r.Result}}
+		animate = true
 	}
 	a.refresh()
 
@@ -176,6 +199,14 @@ func (a *App) Exec(line string) {
 		entry = append(entry, "i "+note)
 	}
 	a.appendLog(entry...)
+
+	if r, ok := res.(shell.RebuildResult); ok {
+		return a.startRebuild(r.Rebuilt)
+	}
+	if animate {
+		return a.startArm()
+	}
+	return nil
 }
 
 // served reports whether any flush did work worth drawing.

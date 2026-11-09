@@ -95,7 +95,7 @@ func (a *App) tabBar() string {
 
 func (a *App) help() string {
 	return styleMuted.Width(a.width).MaxWidth(a.width).Render(
-		"enter run · tab/shift+tab switch view · ↑/↓ history · pgup/pgdn scroll log · ctrl+c quit")
+		"enter run · tab/shift+tab switch view · ↑/↓ history · pgup/pgdn scroll log · esc skip animation · ctrl+c quit")
 }
 
 func onOffWord(b bool) string {
