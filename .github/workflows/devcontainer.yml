@@ -1,0 +1,31 @@
+name: Devcontainer
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .devcontainer/**
+      - go.mod
+      - go.sum
+      - .github/workflows/devcontainer.yml
+  pull_request:
+    paths:
+      - .devcontainer/**
+      - go.mod
+      - go.sum
+      - .github/workflows/devcontainer.yml
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build devcontainer and run checks inside it
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          runCmd: go test ./... && practice-os --help
